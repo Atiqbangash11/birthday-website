@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Happy Birthday My Love 💖</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* ---------- RESET & BASE ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+        body {
+            background: #FFE4E9;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Quicksand', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* ---------- MAIN WRAPPER (No Scroll) ---------- */
+        .container {
+            width: 100vw;
+            height: 100vh;
+            max-width: 500px;
+            /* Center card style */
+            background: linear-gradient(145deg, #fff5f7 0%, #ffe0e6 100%);
+            box-shadow: inset 0 0 50px rgba(255, 105, 180, 0.15);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        /* ---------- GLOBAL FLOATING HEARTS (Background) ---------- */
+        .floating-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .float-item {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.3;
+            animation: floatAround 12s infinite alternate ease-in-out;
+        }
+        @keyframes floatAround {
+            0% {
+                transform: translate(0, 0) scale(1) rotate(0deg);
+            }
+            100% {
+                transform: translate(30px, -60px) scale(1.2) rotate(20deg);
+            }
+        }
+
+        /* ---------- STEPS (Each screen) ---------- */
+        .step {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            text-align: center;
+            z-index: 10;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1), transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+            transform: scale(0.95);
+        }
+        .step.active {
+            opacity: 1;
+            pointer-events: all;
+            transform: scale(1);
+        }
+
+        /* ---------- STEP 1: INTRO ---------- */
+        #step1 h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3.8rem;
+            color: #D6336C;
+            text-shadow: 0 4px 20px rgba(214, 51, 108, 0.3);
+            line-height: 1.2;
+        }
+        #step1 .sub {
+            font-size: 1.2rem;
+            color: #A1325A;
+            margin-top: 10px;
+            letter-spacing: 3px;
+            font-weight: 700;
+        }
+        .btn-primary {
+            margin-top: 30px;
+            background: #FF69B4;
+            border: none;
+            padding: 18px 50px;
+            border-radius: 60px;
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 700;
+            box-shadow: 0 12px 0 #A1325A, 0 10px 30px rgba(255, 105, 180, 0.5);
+            cursor: pointer;
+            transition: 0.08s linear;
+            font-family: 'Quicksand', sans-serif;
+            letter-spacing: 1px;
+        }
+        .btn-primary:active {
+            transform: translateY(8px);
+            box-shadow: 0 4px 0 #A1325A;
+        }
+
+        /* ---------- STEP 2: CAKE & CANDLES ---------- */
+        .cake-wrapper {
+            position: relative;
+            width: 250px;
+            height: 250px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+        }
+        /* The Cake */
+        .cake {
+            position: relative;
+            width: 200px;
+            height: 160px;
+            background: #FFB6C1;
+            border-radius: 20px 20px 30px 30px;
+            box-shadow: 0 15px 0 #D6336C, 0 25px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            transition: all 0.5s;
+        }
+        .cake::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            width: 160px;
+            height: 30px;
+            background: #FF99B5;
+            border-radius: 40px 40px 0 0;
+            box-shadow: 0 -5px 0 #E06F8A;
+        }
+        /* Cream layers */
+        .cream {
+            position: absolute;
+            width: 90%;
+            height: 12px;
+            background: #FFF0F5;
+            border-radius: 20px;
+            left: 5%;
+        }
+        .cream1 {
+            top: 20px;
+        }
+        .cream2 {
+            top: 60px;
+        }
+        /* Candles */
+        .candle {
+            position: absolute;
+            width: 12px;
+            height: 45px;
+            background: #FFD700;
+            border-radius: 4px 4px 0 0;
+            top: -30px;
+            box-shadow: inset -2px 0 0 rgba(0, 0, 0, 0.1);
+            transition: all 0.4s;
+        }
+        .candle::after {
+            content: '';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 14px;
+            height: 18px;
+            background: radial-gradient(circle, #FFA500, #FF4500);
+            border-radius: 50% 50% 50% 50% / 30% 30% 70% 70%;
+            opacity: 0;
+            transition: opacity 0.5s;
+            filter: blur(1px);
+            box-shadow: 0 0 25px #FFA500;
+        }
+        .candle.lit::after {
+            opacity: 1;
+            animation: flicker 0.15s infinite alternate;
+        }
+        @keyframes flicker {
+            0% {
+                transform: translateX(-50%) scale(1) rotate(-5deg);
+            }
+            100% {
+                transform: translateX(-50%) scale(1.2) rotate(5deg);
+            }
+        }
+        .c1 {
+            left: 30px;
+        }
+        .c2 {
+            left: 70px;
+            height: 55px;
+            top: -40px;
+        }
+        .c3 {
+            right: 30px;
+            height: 48px;
+            top: -33px;
+        }
+
+        .btn-secondary {
+            margin-top: 10px;
+            background: white;
+            border: 3px solid #FF69B4;
+            padding: 14px 30px;
+            border-radius: 50px;
+            color: #D6336C;
+            font-weight: 700;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
+            font-family: 'Quicksand', sans-serif;
+        }
+        .btn-secondary:active {
+            transform: scale(0.95);
+        }
+
+        /* ---------- STEP 3: WISH (Shooting Star) ---------- */
+        .star-container {
+            position: relative;
+            width: 100%;
+            height: 150px;
+        }
+        .shooting-star {
+            position: absolute;
+            top: 20px;
+            right: -100px;
+            font-size: 2.5rem;
+            opacity: 0;
+            transition: all 3s ease-in-out;
+        }
+        .shooting-star.fire {
+            right: 110%;
+            opacity: 1;
+            top: 80px;
+        }
+        .wish-text {
+            font-size: 1.8rem;
+            color: #A1325A;
+            font-family: 'Great Vibes', cursive;
+            margin: 20px 0;
+            min-height: 80px;
+        }
+
+        /* ---------- STEP 4: CUTTING THE CAKE (Interactive) ---------- */
+        .cake-split-container {
+            position: relative;
+            width: 240px;
+            height: 200px;
+            margin: 10px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .cake-half {
+            position: absolute;
+            width: 120px;
+            height: 160px;
+            background: #FFB6C1;
+            border-radius: 20px;
+            box-shadow: 0 10px 0 #D6336C;
+            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .cake-half.left {
+            left: 10px;
+            border-radius: 20px 0 0 20px;
+            transform-origin: right center;
+        }
+        .cake-half.right {
+            right: 10px;
+            border-radius: 0 20px 20px 0;
+            transform-origin: left center;
+        }
+        .cake-half .inner-heart {
+            font-size: 3rem;
+            opacity: 0;
+            transition: opacity 0.5s 0.8s;
+        }
+        .cake-half.split-left {
+            transform: translateX(-80px) rotate(-8deg);
+        }
+        .cake-half.split-right {
+            transform: translateX(80px) rotate(8deg);
+        }
+        .cake-half.split-left .inner-heart,
+        .cake-half.split-right .inner-heart {
+            opacity: 1;
+        }
+        .knife {
+            position: absolute;
+            font-size: 3.5rem;
+            z-index: 20;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(0deg);
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            filter: drop-shadow(0 8px 15px rgba(0, 0, 0, 0.3));
+            cursor: pointer;
+        }
+        .knife.cut {
+            transform: translate(-50%, -50%) rotate(90deg) scale(1.3);
+        }
+        .cut-hint {
+            color: #D6336C;
+            font-weight: 700;
+            margin-top: 10px;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            border: 1px dashed #FF69B4;
+        }
+
+        /* ---------- STEP 5: SECRET LETTER & CONFETTI ---------- */
+        .letter-box {
+            background: white;
+            padding: 30px 25px;
+            border-radius: 30px 10px 30px 10px;
+            box-shadow: 0 20px 50px rgba(214, 51, 108, 0.25);
+            transform: rotate(-1deg);
+            max-width: 320px;
+            border: 2px solid #FFB6C1;
+            position: relative;
+            z-index: 15;
+        }
+        .letter-box h2 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.5rem;
+            color: #D6336C;
+        }
+        .letter-box p {
+            font-size: 1.1rem;
+            color: #4a2a33;
+            margin: 15px 0;
+            line-height: 1.7;
+            font-weight: 600;
+        }
+        .letter-box .sign {
+            font-family: 'Great Vibes', cursive;
+            font-size: 1.8rem;
+            color: #FF69B4;
+        }
+
+        /* ---------- CONFETTI CANVAS ---------- */
+        #confetti-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        /* ---------- RESPONSIVE TWEAKS ---------- */
+        @media (max-width: 480px) {
+            #step1 h1 {
+                font-size: 2.8rem;
+            }
+            .cake-wrapper {
+                transform: scale(0.8);
+            }
+            .cake-split-container {
+                transform: scale(0.8);
+            }
+            .btn-primary {
+                padding: 14px 35px;
+                font-size: 1.2rem;
+            }
+            .letter-box {
+                padding: 20px;
+                max-width: 280px;
+            }
+            .letter-box h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="app">
+
+        <!-- Background Floating Elements -->
+        <div class="floating-bg">
+            <span class="float-item" style="top:5%; left:5%; animation-delay:0s;">🌸</span>
+            <span class="float-item" style="top:15%; right:8%; animation-delay:2s;">💗</span>
+            <span class="float-item" style="bottom:20%; left:3%; animation-delay:4s;">✨</span>
+            <span class="float-item" style="bottom:10%; right:5%; animation-delay:1s;">🌷</span>
+        </div>
+
+        <!-- STEP 1: Welcome -->
+        <div class="step active" id="step1">
+            <h1>Happy Birthday<br>My Love ❤️</h1>
+            <p class="sub">✨ Aaj ka din sirf tumhara hai ✨</p>
+            <button class="btn-primary" onclick="goToStep(2)">🎂 Chalo Cake Dekhein</button>
+        </div>
+
+        <!-- STEP 2: Light Candles -->
+        <div class="step" id="step2">
+            <div class="cake-wrapper">
+                <div class="cake" id="cakeBase">
+                    <div class="cream cream1"></div>
+                    <div class="cream cream2"></div>
+                    <div class="candle c1" id="c1"></div>
+                    <div class="candle c2" id="c2"></div>
+                    <div class="candle c3" id="c3"></div>
+                </div>
+            </div>
+            <h2 style="color:#D6336C; font-family:'Great Vibes',cursive; font-size:2rem;">Candles Light Karo</h2>
+            <p style="color:#A1325A; margin-bottom:5px;">Ek baar tap karo, roshni phail jayegi ✨</p>
+            <button class="btn-secondary" id="lightBtn" onclick="lightCandles()">🕯️ Light The Magic</button>
+            <button class="btn-primary" style="margin-top:15px; padding:12px 30px; font-size:1rem; display:none;" id="nextToWishBtn" onclick="goToStep(3)">⭐ Wish Karne Chalein ➜</button>
+        </div>
+
+        <!-- STEP 3: Make a Wish -->
+        <div class="step" id="step3">
+            <h2 style="color:#D6336C; font-family:'Great Vibes',cursive; font-size:2.8rem;">Make a Wish</h2>
+            <div class="star-container">
+                <div class="shooting-star" id="star">🌟</div>
+            </div>
+            <div class="wish-text" id="wishDisplay">✨ Ek baar tap karo,<br>Taara chhutega ✨</div>
+            <button class="btn-secondary" onclick="fireStar()">💫 Wish upon a star</button>
+            <button class="btn-primary" style="margin-top:15px; padding:12px 30px; font-size:1rem; display:none;" id="nextToCutBtn" onclick="goToStep(4)">🔪 Cake Cut Karein ➜</button>
+        </div>
+
+        <!-- STEP 4: Cut the Cake -->
+        <div class="step" id="step4">
+            <h2 style="color:#D6336C; font-family:'Great Vibes',cursive; font-size:2.5rem;">Cake Cut Karein</h2>
+            <div class="cake-split-container">
+                <div class="knife" id="knife" onclick="cutCake()">🔪</div>
+                <div class="cake-half left" id="cakeLeft">
+                    <div class="inner-heart">💖</div>
+                </div>
+                <div class="cake-half right" id="cakeRight">
+                    <div class="inner-heart">💖</div>
+                </div>
+            </div>
+            <div class="cut-hint" id="cutHint">👆 Knife ko tap karke cake kat'tein hain!</div>
+            <button class="btn-primary" style="margin-top:15px; padding:12px 30px; font-size:1rem; display:none;" id="nextToLetterBtn" onclick="goToStep(5)">💌 Khat Parhain ➜</button>
+        </div>
+
+        <!-- STEP 5: Secret Letter & Celebration -->
+        <div class="step" id="step5">
+            <div class="letter-box">
+                <h2>💌 Meri Jaan,</h2>
+                <p>
+                    Tum sirf meri girlfriend nahi,<br>
+                    meri duniya ki roshni ho. 🌞<br><br>
+                    Har din tumhare saath jeena<br>
+                    ek khwab hai jo sach ho gaya.<br><br>
+                    <span style="color:#D6336C; font-weight:700;">I love you more than yesterday,<br>less than tomorrow.</span>
+                </p>
+                <p class="sign">- Tumhara Hamesha ❤️</p>
+            </div>
+            <button class="btn-primary" style="margin-top:25px; padding:12px 40px;" onclick="celebrate()">🎉 Party Shuru Karo!</button>
+        </div>
+
+        <!-- Confetti Canvas -->
+        <canvas id="confetti-canvas"></canvas>
+    </div>
+
+    <script>
+        // ---------- GLOBAL VARIABLES ----------
+        let currentStep = 1;
+        let candlesLit = false;
+        let cakeCut = false;
+
+        // ---------- STEP NAVIGATION ----------
+        function goToStep(num) {
+            document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+            document.getElementById('step' + num).classList.add('active');
+            currentStep = num;
+        }
+
+        // ---------- STEP 2: LIGHT CANDLES ----------
+        function lightCandles() {
+            if (candlesLit) return;
+            candlesLit = true;
+            document.getElementById('c1').classList.add('lit');
+            document.getElementById('c2').classList.add('lit');
+            document.getElementById('c3').classList.add('lit');
+            document.getElementById('lightBtn').innerText = '🕯️✨ Roshan! ✨🕯️';
+            document.getElementById('lightBtn').style.background = '#FFD700';
+            document.getElementById('lightBtn').style.color = '#333';
+            document.getElementById('nextToWishBtn').style.display = 'inline-block';
+
+            // Little sparkle effect
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => {
+                    let spark = document.createElement('span');
+                    spark.innerText = '✨';
+                    spark.style.position = 'absolute';
+                    spark.style.fontSize = '2rem';
+                    spark.style.pointerEvents = 'none';
+                    spark.style.zIndex = '99';
+                    spark.style.left = (30 + Math.random() * 60) + '%';
+                    spark.style.top = (20 + Math.random() * 40) + '%';
+                    spark.style.transition = 'all 1s ease-out';
+                    spark.style.opacity = '1';
+                    document.getElementById('step2').appendChild(spark);
+                    setTimeout(() => {
+                        spark.style.transform = 'translateY(-80px) scale(0)';
+                        spark.style.opacity = '0';
+                        setTimeout(() => spark.remove(), 1000);
+                    }, 50);
+                }, i * 100);
+            }
+        }
+
+        // ---------- STEP 3: SHOOTING STAR ----------
+        function fireStar() {
+            const star = document.getElementById('star');
+            star.classList.remove('fire');
+            // reset
+            void star.offsetWidth;
+            star.classList.add('fire');
+
+            const wishes = [
+                "✨ Tum meri taqdeer ho ✨",
+                "🌹 Har janam tumhara hi ho 🌹",
+                "💫 Dil sirf tumpe aata hai 💫",
+                "🌸 Tumse pyar karna meri aadat hai 🌸",
+                "💖 You are my forever 💖"
+            ];
+            const display = document.getElementById('wishDisplay');
+            display.style.opacity = '0';
+            setTimeout(() => {
+                display.innerText = wishes[Math.floor(Math.random() * wishes.length)];
+                display.style.opacity = '1';
+            }, 400);
+
+            document.getElementById('nextToCutBtn').style.display = 'inline-block';
+
+            // star sound effect vibe
+            setTimeout(() => {
+                star.classList.remove('fire');
+            }, 3000);
+        }
+
+        // ---------- STEP 4: CUT CAKE ----------
+        function cutCake() {
+            if (cakeCut) return;
+            cakeCut = true;
+
+            const knife = document.getElementById('knife');
+            const left = document.getElementById('cakeLeft');
+            const right = document.getElementById('cakeRight');
+            const hint = document.getElementById('cutHint');
+
+            knife.classList.add('cut');
+            setTimeout(() => {
+                left.classList.add('split-left');
+                right.classList.add('split-right');
+                hint.innerText = '💖 Dil nikal aya! 💖';
+                hint.style.border = '2px solid #FF1493';
+                hint.style.background = '#FFF0F5';
+                document.getElementById('nextToLetterBtn').style.display = 'inline-block';
+            }, 400);
+
+            // mini hearts burst
+            for (let i = 0; i < 6; i++) {
+                setTimeout(() => {
+                    let h = document.createElement('span');
+                    h.innerText = '❤️';
+                    h.style.position = 'absolute';
+                    h.style.fontSize = '2rem';
+                    h.style.pointerEvents = 'none';
+                    h.style.zIndex = '25';
+                    h.style.left = (40 + Math.random() * 20) + '%';
+                    h.style.top = (30 + Math.random() * 30) + '%';
+                    h.style.transition = 'all 1.5s ease-out';
+                    h.style.opacity = '1';
+                    document.getElementById('step4').appendChild(h);
+                    setTimeout(() => {
+                        h.style.transform = `translate(${-30 + Math.random() * 60}px, ${-80 + Math.random() * -40}px) scale(0)`;
+                        h.style.opacity = '0';
+                        setTimeout(() => h.remove(), 1500);
+                    }, 50);
+                }, i * 150);
+            }
+        }
+
+        // ---------- STEP 5: CELEBRATION (CONFETTI) ----------
+        function celebrate() {
+            const canvas = document.getElementById('confetti-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const colors = ['#FF69B4', '#FF1493', '#FFB6C1', '#FFD700', '#FFFFFF', '#FFA07A'];
+            const particles = [];
+
+            for (let i = 0; i < 150; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    w: Math.random() * 10 + 5,
+                    h: Math.random() * 6 + 3,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    speed: Math.random() * 6 + 3,
+                    angle: Math.random() * 2 * Math.PI,
+                    spin: (Math.random() - 0.5) * 0.1,
+                });
+            }
+
+            let frame = 0;
+
+            function drawConfetti() {
+                if (frame > 180) return; // stop after 3 sec
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    p.y += p.speed * 0.6;
+                    p.x += Math.sin(p.angle + frame * 0.02) * 1.5;
+                    p.angle += p.spin;
+                    ctx.fillStyle = p.color;
+                    ctx.shadowColor = 'rgba(255,255,255,0.5)';
+                    ctx.shadowBlur = 5;
+                    ctx.fillRect(p.x, p.y, p.w, p.h);
+                    // reset
+                    if (p.y > canvas.height) {
+                        p.y = -20;
+                        p.x = Math.random() * canvas.width;
+                    }
+                });
+                frame++;
+                requestAnimationFrame(drawConfetti);
+            }
+            drawConfetti();
+
+            // Background music vibe (visual only)
+            document.querySelector('.container').style.background = 'linear-gradient(145deg, #ffd1dc, #ffb6c1)';
+
+            // extra surprise message
+            setTimeout(() => {
+                alert('🎂🎉 Happy Birthday Meri Jaan! 🎉🎂\nMain tumse bahut bahut pyar karta hu! 💖');
+            }, 500);
+        }
+
+        // ---------- INITIAL SETUP ----------
+        // For mobile touch support
+        document.addEventListener('touchstart', function(e) {
+            // pass
+        }, { passive: true });
+
+        // Resize canvas if needed
+        window.addEventListener('resize', () => {
+            const canvas = document.getElementById('confetti-canvas');
+            if (canvas) {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+        });
+
+        console.log('💖 Happy Birthday to your beautiful girlfriend! 💖');
+    </script>
+
+</body>
+</html>
