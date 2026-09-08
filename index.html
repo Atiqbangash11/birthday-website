@@ -5,29 +5,369 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Happy Birthday Safia 💖</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Quicksand:wght@400;500;600;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- ===== FONTS ===== -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Great+Vibes&family=Poppins:wght@300;400;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
-        /* ===== RESET ===== */
+        /* ==========================================================
+           COUNTDOWN & WELCOME STYLES
+        ========================================================== */
         * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 40%, #f472b6 100%);
+            color: #831843;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Canvas for Fireworks */
+        #fireworksCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        /* Ambient Bubbles */
+        .bg-sparkles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .bubble {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.45);
+            border-radius: 50%;
+            animation: floatUp 8s infinite linear;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+        }
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+            padding: 20px;
+            z-index: 10;
+        }
+
+        /* ===== LOCK CARD (Countdown) ===== */
+        .lock-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            border-radius: 32px;
+            padding: 50px 30px;
+            box-shadow: 0 25px 60px rgba(157, 23, 77, 0.15);
+            transition: all 0.6s ease;
+        }
+
+        .lock-icon {
+            font-size: 55px;
+            margin-bottom: 15px;
+            display: inline-block;
+            animation: softPulse 2.5s infinite ease-in-out;
+        }
+
+        @keyframes softPulse {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(244,114,182,0.4)); }
+            50% { transform: scale(1.15); filter: drop-shadow(0 0 20px rgba(244,114,182,0.8)); }
+        }
+
+        .lock-title {
+            font-size: 30px;
+            font-weight: 700;
+            color: #831843;
+            margin-bottom: 8px;
+        }
+
+        .lock-subtitle {
+            font-size: 15px;
+            color: #9d174d;
+            margin-bottom: 35px;
+            font-weight: 300;
+        }
+
+        .countdown-grid {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .time-box {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #fbcfe8;
+            padding: 18px;
+            border-radius: 20px;
+            min-width: 95px;
+            box-shadow: 0 10px 20px rgba(157, 23, 77, 0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .time-box:hover {
+            transform: translateY(-5px);
+        }
+
+        .num {
+            font-size: 38px;
+            font-weight: 700;
+            color: #db2777;
+            display: block;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .label {
+            font-size: 12px;
+            color: #9d174d;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        /* ===== BIRTHDAY CARD (Celebration with fireworks) ===== */
+        .bday-card {
+            display: none;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(25px);
+            border: 3px solid #ffffff;
+            border-radius: 35px;
+            padding: 60px 35px;
+            box-shadow: 0 30px 70px rgba(157, 23, 77, 0.3);
+            opacity: 0;
+            transform: scale(0.3) rotate(-5deg);
+        }
+
+        .bday-card.active {
+            display: block;
+            animation: bdayPopIn 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes bdayPopIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.2) rotate(-5deg);
+            }
+            70% {
+                transform: scale(1.08) rotate(2deg);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        .bday-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 68px;
+            color: #be185d;
+            text-shadow: 3px 3px 6px rgba(251, 207, 232, 0.8), 0 0 20px rgba(244, 114, 182, 0.4);
+            margin-bottom: 10px;
+            line-height: 1.2;
+            animation: glowText 2s infinite alternate ease-in-out;
+        }
+
+        @keyframes glowText {
+            from { text-shadow: 0 0 10px rgba(219, 39, 119, 0.3), 0 0 20px rgba(244, 114, 182, 0.3); }
+            to { text-shadow: 0 0 20px rgba(219, 39, 119, 0.8), 0 0 35px rgba(251, 191, 36, 0.6); }
+        }
+
+        .bday-sub {
+            font-size: 22px;
+            color: #831843;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 25px;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            max-width: 350px;
+            height: 8px;
+            background: #fbcfe8;
+            border-radius: 10px;
+            margin: 25px auto 0;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #f472b6, #db2777, #fbbf24);
+            border-radius: 10px;
+            transition: width 0.1s linear;
+        }
+
+        .timer-text {
+            font-size: 13px;
+            color: #9d174d;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        /* ===== WELCOME CARD ===== */
+        .welcome-card {
+            display: none;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(25px);
+            border: 3px solid #ffffff;
+            border-radius: 35px;
+            padding: 50px 35px;
+            box-shadow: 0 30px 70px rgba(157, 23, 77, 0.25);
+            opacity: 0;
+            transform: scale(0.3);
+        }
+
+        .welcome-card.zoom-in-active {
+            display: block;
+            animation: zoomInMasterpiece 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes zoomInMasterpiece {
+            0% {
+                opacity: 0;
+                transform: scale(0.2) rotate(-3deg);
+            }
+            70% {
+                transform: scale(1.05) rotate(1deg);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        .fancy-header {
+            font-family: 'Dancing Script', cursive;
+            font-size: 48px;
+            color: #db2777;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(251, 207, 232, 0.5);
+        }
+
+        .sentence-box {
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 35px;
+        }
+
+        .sentence {
+            font-size: 20px;
+            color: #831843;
+            font-weight: 500;
+            line-height: 1.6;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: all 0.8s ease-out;
+            margin: 6px 0;
+        }
+
+        .sentence.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .sentence-highlight {
+            color: #be185d;
+            font-weight: 700;
+        }
+
+        /* ===== SURPRISE BUTTON ===== */
+        .surprise-btn {
+            background: linear-gradient(135deg, #ec4899, #db2777);
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: 600;
+            padding: 18px 45px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 12px 30px rgba(219, 39, 119, 0.4);
+            transition: all 0.35s ease;
+            opacity: 0;
+            transform: scale(0.8);
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .surprise-btn.show-btn {
+            opacity: 1;
+            transform: scale(1);
+            animation: gentleBounce 2s infinite ease-in-out 1s;
+        }
+
+        .surprise-btn:hover {
+            background: linear-gradient(135deg, #db2777, #be185d);
+            transform: translateY(-4px) scale(1.04);
+            box-shadow: 0 18px 35px rgba(219, 39, 119, 0.5);
+        }
+
+        @keyframes gentleBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        /* ==========================================================
+           ORIGINAL index.html STYLES (scoped inside #mainJourney)
+        ========================================================== */
+        #mainJourney {
+            display: none;
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 10001;
+            background: #FFE4E9;
+            overflow: hidden;
+        }
+
+        #mainJourney * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
         }
-        html,
-        body {
-            width: 100%;
-            height: 100%;
+
+        #mainJourney .container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            max-width: 500px;
+            margin: auto;
             overflow: hidden;
-            background: #FFE4E9;
-            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #fff5f7, #ffe0e6);
+            box-shadow: 0 0 35px rgba(214, 51, 108, .25);
         }
 
-        /* ==========================================================
-           SECTION 1: SIMPLE CARD
-        ========================================================== */
-        #section1 {
+        /* ===== SECTION 1 (Simple Card) ===== */
+        #mainJourney #section1 {
             position: absolute;
             inset: 0;
             display: flex;
@@ -37,12 +377,14 @@
             z-index: 10;
             transition: opacity 0.8s ease, transform 0.8s ease;
         }
-        #section1.hidden {
+
+        #mainJourney #section1.hidden {
             opacity: 0;
             transform: scale(1.05);
             pointer-events: none;
         }
-        #section1 .card {
+
+        #mainJourney #section1 .card {
             background: rgba(255, 255, 255, 0.85);
             padding: 40px 30px;
             border-radius: 60px 20px 60px 20px;
@@ -53,21 +395,24 @@
             position: relative;
             backdrop-filter: blur(2px);
         }
-        #section1 .card h1 {
+
+        #mainJourney #section1 .card h1 {
             color: #D6336C;
             font-size: 3rem;
             font-weight: 400;
             letter-spacing: 2px;
             font-family: 'Great Vibes', cursive;
         }
-        #section1 .card .msg {
+
+        #mainJourney #section1 .card .msg {
             color: #A1325A;
             font-size: 1.4rem;
             margin: 20px 0;
             line-height: 1.6;
             font-family: 'Great Vibes', cursive;
         }
-        #section1 .btn-sendlove {
+
+        #mainJourney .btn-sendlove {
             background: #FF69B4;
             border: none;
             color: white;
@@ -79,54 +424,42 @@
             font-family: 'Great Vibes', cursive;
             box-shadow: 0 6px 0 #A1325A;
         }
-        #section1 .btn-sendlove:active {
+
+        #mainJourney .btn-sendlove:active {
             transform: scale(0.95);
             box-shadow: 0 2px 0 #A1325A;
         }
 
-        #section1 .heart-float {
+        #mainJourney #section1 .heart-float {
             position: absolute;
             font-size: 2.5rem;
             animation: floatUp 4s infinite ease-in-out;
             pointer-events: none;
         }
-        @keyframes floatUp {
-            0% {
-                transform: translateY(0) scale(1);
-                opacity: 0.7;
-            }
-            50% {
-                transform: translateY(-50px) scale(1.3);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100px) scale(0.8);
-                opacity: 0;
-            }
-        }
-        #section1 .h1 {
+
+        #mainJourney #section1 .h1 {
             top: 10%;
             left: 5%;
             animation-delay: 0s;
         }
-        #section1 .h2 {
+        #mainJourney #section1 .h2 {
             top: 20%;
             right: 8%;
             animation-delay: 1s;
         }
-        #section1 .h3 {
+        #mainJourney #section1 .h3 {
             bottom: 15%;
             left: 10%;
             animation-delay: 2s;
         }
-        #section1 .h4 {
+        #mainJourney #section1 .h4 {
             bottom: 25%;
             right: 5%;
             animation-delay: 0.5s;
         }
 
-        /* Modal */
-        #section1 .modal-overlay {
+        /* Modal for section1 */
+        #mainJourney #section1 .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
@@ -142,11 +475,13 @@
             transition: opacity 0.4s ease;
             z-index: 100;
         }
-        #section1 .modal-overlay.active {
+
+        #mainJourney #section1 .modal-overlay.active {
             opacity: 1;
             pointer-events: auto;
         }
-        #section1 .modal-card {
+
+        #mainJourney #section1 .modal-card {
             background: #FFF0F5;
             border: 3px solid #FF69B4;
             border-radius: 30px;
@@ -158,23 +493,27 @@
             transform: scale(0.7);
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        #section1 .modal-overlay.active .modal-card {
+
+        #mainJourney #section1 .modal-overlay.active .modal-card {
             transform: scale(1);
         }
-        #section1 .modal-card h2 {
+
+        #mainJourney #section1 .modal-card h2 {
             color: #D6336C;
             font-size: 2.2rem;
             margin-bottom: 10px;
             font-family: 'Great Vibes', cursive;
         }
-        #section1 .modal-card p {
+
+        #mainJourney #section1 .modal-card p {
             color: #8B0046;
             font-size: 1.3rem;
             line-height: 1.5;
             margin-bottom: 20px;
             font-family: 'Poppins', sans-serif;
         }
-        #section1 .close-btn {
+
+        #mainJourney #section1 .close-btn {
             background: #D6336C;
             color: white;
             border: none;
@@ -187,10 +526,8 @@
             box-shadow: 0 4px 10px rgba(214, 51, 108, 0.3);
         }
 
-        /* ==========================================================
-           SECTION 2: 13-STEP JOURNEY (all styles)
-        ========================================================== */
-        #section2 {
+        /* ===== SECTION 2 (13-Step Journey) ===== */
+        #mainJourney #section2 {
             position: absolute;
             inset: 0;
             z-index: 5;
@@ -199,13 +536,14 @@
             pointer-events: none;
             transition: opacity 0.8s ease, transform 0.8s ease;
         }
-        #section2.visible {
+
+        #mainJourney #section2.visible {
             opacity: 1;
             transform: scale(1);
             pointer-events: auto;
         }
 
-        #section2 .container {
+        #mainJourney #section2 .container {
             position: relative;
             width: 100vw;
             height: 100vh;
@@ -215,7 +553,8 @@
             background: linear-gradient(135deg, #fff5f7, #ffe0e6);
             box-shadow: 0 0 35px rgba(214, 51, 108, .25);
         }
-        #section2 .bg-heart {
+
+        #mainJourney .bg-heart {
             position: absolute;
             color: #ff69b4;
             opacity: .10;
@@ -223,6 +562,7 @@
             pointer-events: none;
             font-size: 28px;
         }
+
         @keyframes floatHeart {
             0% {
                 transform: translateY(110vh) rotate(0) scale(0.8);
@@ -231,7 +571,8 @@
                 transform: translateY(-15vh) rotate(360deg) scale(1.2);
             }
         }
-        #section2 .step {
+
+        #mainJourney .step {
             position: absolute;
             inset: 0;
             display: flex;
@@ -246,31 +587,36 @@
             transition: opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1),
                 transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         }
-        #section2 .step.active {
+
+        #mainJourney .step.active {
             opacity: 1;
             transform: scale(1) translateY(0);
             pointer-events: auto;
         }
-        #section2 .title {
+
+        #mainJourney .title {
             font-family: 'Great Vibes', cursive;
             color: #D6336C;
             font-size: 52px;
             line-height: 1.05;
             margin-bottom: 10px;
         }
-        #section2 .subtitle {
+
+        #mainJourney .subtitle {
             color: #8d4a61;
             font-size: 15px;
             line-height: 1.7;
             max-width: 370px;
         }
-        #section2 .small-title {
+
+        #mainJourney .small-title {
             font-family: 'Great Vibes', cursive;
             color: #D6336C;
             font-size: 40px;
             margin-bottom: 10px;
         }
-        #section2 .btn {
+
+        #mainJourney .btn {
             border: none;
             outline: none;
             cursor: pointer;
@@ -288,42 +634,44 @@
             position: relative;
             overflow: hidden;
         }
-        #section2 .btn:active {
+
+        #mainJourney .btn:active {
             transform: translateY(5px);
             box-shadow: 0 2px 0 #D6336C, 0 6px 12px rgba(214, 51, 108, .18);
         }
-        #section2 .btn.white {
+
+        #mainJourney .btn.white {
             background: white;
             color: #D6336C;
             border: 2px solid #ff69b4;
             box-shadow: 0 6px 0 #ffb6c1, 0 10px 18px rgba(214, 51, 108, .12);
         }
-        #section2 .btn.white:active {
+
+        #mainJourney .btn.white:active {
             transform: translateY(4px);
             box-shadow: 0 2px 0 #ffb6c1;
         }
-        #section2 .big-heart {
+
+        #mainJourney .big-heart {
             font-size: 88px;
             animation: heartbeat 1.3s infinite;
             filter: drop-shadow(0 8px 14px rgba(214, 51, 108, .25));
         }
+
         @keyframes heartbeat {
-            0%,
-            100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.12);
-            }
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.12); }
         }
-        /* Balloons */
-        #section2 .balloons {
+
+        /* ---- Balloons ---- */
+        #mainJourney .balloons {
             position: relative;
             width: 300px;
             height: 260px;
             margin-bottom: 5px;
         }
-        #section2 .balloon {
+
+        #mainJourney .balloon {
             position: absolute;
             width: 72px;
             height: 92px;
@@ -334,10 +682,9 @@
             cursor: pointer;
             transition: transform 0.15s;
         }
-        #section2 .balloon:active {
-            transform: scale(0.92);
-        }
-        #section2 .balloon:after {
+
+        #mainJourney .balloon:active { transform: scale(0.92); }
+        #mainJourney .balloon:after {
             content: "";
             position: absolute;
             bottom: -8px;
@@ -347,7 +694,7 @@
             border-right: 7px solid transparent;
             border-top: 12px solid #e83d87;
         }
-        #section2 .balloon:before {
+        #mainJourney .balloon:before {
             content: "";
             position: absolute;
             top: 14px;
@@ -358,7 +705,7 @@
             background: rgba(255, 255, 255, .5);
             transform: rotate(25deg);
         }
-        #section2 .string {
+        #mainJourney .string {
             position: absolute;
             top: 91px;
             left: 50%;
@@ -366,60 +713,36 @@
             height: 120px;
             background: #b85b7d;
         }
-        #section2 .b1 {
-            left: 5px;
-            top: 70px
-        }
-        #section2 .b2 {
-            left: 72px;
-            top: 15px;
-            animation-delay: .4s
-        }
-        #section2 .b3 {
-            left: 145px;
-            top: 65px;
-            animation-delay: .8s
-        }
-        #section2 .b4 {
-            left: 215px;
-            top: 20px;
-            animation-delay: .2s
-        }
-        #section2 .b5 {
+
+        #mainJourney .b1 { left: 5px; top: 70px; }
+        #mainJourney .b2 { left: 72px; top: 15px; animation-delay: .4s; }
+        #mainJourney .b3 { left: 145px; top: 65px; animation-delay: .8s; }
+        #mainJourney .b4 { left: 215px; top: 20px; animation-delay: .2s; }
+        #mainJourney .b5 {
             left: 110px;
             top: 120px;
             animation-delay: .6s;
             width: 60px;
             height: 78px;
         }
-        #section2 .b5:after {
-            border-top-color: #d45a8a;
-        }
+        #mainJourney .b5:after { border-top-color: #d45a8a; }
+
         @keyframes balloonFloat {
-            0%,
-            100% {
-                transform: translateY(0) rotate(-2deg);
-            }
-            50% {
-                transform: translateY(-14px) rotate(3deg);
-            }
+            0%, 100% { transform: translateY(0) rotate(-2deg); }
+            50% { transform: translateY(-14px) rotate(3deg); }
         }
-        #section2 .balloon.pop {
+
+        #mainJourney .balloon.pop {
             animation: popBalloon .5s forwards !important;
         }
+
         @keyframes popBalloon {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.4);
-            }
-            100% {
-                transform: scale(0);
-                opacity: 0;
-            }
+            0% { transform: scale(1); }
+            50% { transform: scale(1.4); }
+            100% { transform: scale(0); opacity: 0; }
         }
-        #section2 .balloon-msg {
+
+        #mainJourney .balloon-msg {
             font-size: 14px;
             font-weight: 600;
             color: #D6336C;
@@ -430,8 +753,9 @@
             border-radius: 20px;
             transition: all 0.3s;
         }
-        /* Cake */
-        #section2 .cake-area {
+
+        /* ---- Cake ---- */
+        #mainJourney .cake-area {
             position: relative;
             width: 280px;
             height: 260px;
@@ -439,7 +763,7 @@
             justify-content: center;
             align-items: flex-end;
         }
-        #section2 .cake {
+        #mainJourney .cake {
             position: relative;
             width: 230px;
             height: 120px;
@@ -447,7 +771,7 @@
             border-radius: 12px 12px 22px 22px;
             box-shadow: inset 0 -15px 0 #ff9aaa, 0 12px 22px rgba(214, 51, 108, .2);
         }
-        #section2 .cake:before {
+        #mainJourney .cake:before {
             content: "";
             position: absolute;
             width: 250px;
@@ -458,7 +782,7 @@
             border-radius: 50%;
             box-shadow: inset 0 -9px 0 #ffd0d9, 0 4px 0 #D6336C;
         }
-        #section2 .cake-sprinkles {
+        #mainJourney .cake-sprinkles {
             position: absolute;
             top: -8px;
             left: 10px;
@@ -471,7 +795,7 @@
             overflow: hidden;
             white-space: nowrap;
         }
-        #section2 .cream {
+        #mainJourney .cream {
             position: absolute;
             left: 12px;
             right: 12px;
@@ -481,7 +805,8 @@
             background: #fff;
             box-shadow: inset 0 -4px 0 #ffe4ea;
         }
-        #section2 .candle {
+
+        #mainJourney .candle {
             position: absolute;
             top: -78px;
             width: 16px;
@@ -491,30 +816,13 @@
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
             transition: all 0.4s;
         }
-        #section2 .candle:nth-child(1) {
-            left: 30px
-        }
-        #section2 .candle:nth-child(2) {
-            left: 70px;
-            height: 65px;
-            top: -85px
-        }
-        #section2 .candle:nth-child(3) {
-            left: 110px;
-            height: 55px;
-            top: -75px
-        }
-        #section2 .candle:nth-child(4) {
-            right: 70px;
-            height: 62px;
-            top: -82px
-        }
-        #section2 .candle:nth-child(5) {
-            right: 30px;
-            height: 50px;
-            top: -70px
-        }
-        #section2 .flame {
+        #mainJourney .candle:nth-child(1) { left: 30px; }
+        #mainJourney .candle:nth-child(2) { left: 70px; height: 65px; top: -85px; }
+        #mainJourney .candle:nth-child(3) { left: 110px; height: 55px; top: -75px; }
+        #mainJourney .candle:nth-child(4) { right: 70px; height: 62px; top: -82px; }
+        #mainJourney .candle:nth-child(5) { right: 30px; height: 50px; top: -70px; }
+
+        #mainJourney .flame {
             position: absolute;
             width: 18px;
             height: 26px;
@@ -526,47 +834,36 @@
             animation: flameFlicker 1s infinite alternate;
             box-shadow: 0 0 20px #ff9d00;
         }
+
         @keyframes flameFlicker {
-            0% {
-                transform: rotate(-45deg) scale(1);
-            }
-            100% {
-                transform: rotate(-40deg) scale(1.15);
-            }
+            0% { transform: rotate(-45deg) scale(1); }
+            100% { transform: rotate(-40deg) scale(1.15); }
         }
-        #section2 .candle.off .flame {
-            display: none;
-        }
-        #section2 .candle.off {
-            opacity: 0.6;
-            transform: scale(0.85);
-        }
-        /* Star wish */
-        #section2 .star-wrap {
+
+        #mainJourney .candle.off .flame { display: none; }
+        #mainJourney .candle.off { opacity: 0.6; transform: scale(0.85); }
+
+        /* ---- Star Wish ---- */
+        #mainJourney .star-wrap {
             position: relative;
             width: 100%;
             height: 140px;
         }
-        #section2 .star-big {
+        #mainJourney .star-big {
             font-size: 110px;
             animation: starPulse 1.4s infinite;
             filter: drop-shadow(0 0 20px #ffd700);
             cursor: pointer;
             transition: transform 0.2s;
         }
-        #section2 .star-big:active {
-            transform: scale(0.85);
-        }
+        #mainJourney .star-big:active { transform: scale(0.85); }
+
         @keyframes starPulse {
-            0%,
-            100% {
-                transform: scale(.9) rotate(-6deg);
-            }
-            50% {
-                transform: scale(1.12) rotate(6deg);
-            }
+            0%, 100% { transform: scale(.9) rotate(-6deg); }
+            50% { transform: scale(1.12) rotate(6deg); }
         }
-        #section2 .shooting-star-effect {
+
+        #mainJourney .shooting-star-effect {
             position: absolute;
             font-size: 40px;
             right: -60px;
@@ -575,12 +872,13 @@
             transition: all 3s cubic-bezier(0.23, 1, 0.32, 1);
             pointer-events: none;
         }
-        #section2 .shooting-star-effect.fire {
+        #mainJourney .shooting-star-effect.fire {
             right: 120%;
             top: 90px;
             opacity: 1;
         }
-        #section2 .wish-text {
+
+        #mainJourney .wish-text {
             font-family: 'Great Vibes', cursive;
             font-size: 32px;
             color: #D6336C;
@@ -588,14 +886,15 @@
             min-height: 60px;
             transition: opacity 0.4s;
         }
-        /* Cake cut */
-        #section2 .cut-area {
+
+        /* ---- Cake Cut ---- */
+        #mainJourney .cut-area {
             position: relative;
             width: 280px;
             height: 230px;
             margin: 8px;
         }
-        #section2 .cut-cake {
+        #mainJourney .cut-cake {
             position: absolute;
             width: 240px;
             height: 125px;
@@ -606,7 +905,7 @@
             transition: 1.2s cubic-bezier(.2, .8, .2, 1);
             box-shadow: inset 0 -10px 0 #ff9aaa;
         }
-        #section2 .cut-cake:before {
+        #mainJourney .cut-cake:before {
             content: "";
             position: absolute;
             width: 255px;
@@ -617,19 +916,17 @@
             border-radius: 50%;
             box-shadow: 0 5px 0 #D6336C;
         }
-        #section2 .cut-left {
-            clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
-        }
-        #section2 .cut-right {
-            clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);
-        }
-        #section2 .cut-area.cutted .cut-left {
+        #mainJourney .cut-left { clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%); }
+        #mainJourney .cut-right { clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%); }
+
+        #mainJourney .cut-area.cutted .cut-left {
             transform: translateX(-120px) rotate(-10deg);
         }
-        #section2 .cut-area.cutted .cut-right {
+        #mainJourney .cut-area.cutted .cut-right {
             transform: translateX(120px) rotate(10deg);
         }
-        #section2 .knife-icon {
+
+        #mainJourney .knife-icon {
             position: absolute;
             font-size: 68px;
             top: 20px;
@@ -640,14 +937,15 @@
             cursor: pointer;
             filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.15));
         }
-        #section2 .knife-icon:active {
+        #mainJourney .knife-icon:active {
             transform: rotate(-30deg) scale(0.85);
         }
-        #section2 .cutted .knife-icon {
+        #mainJourney .cutted .knife-icon {
             transform: translateY(170px) rotate(40deg);
             opacity: 0;
         }
-        #section2 .inner-heart-cut {
+
+        #mainJourney .inner-heart-cut {
             position: absolute;
             left: 50%;
             top: 100px;
@@ -657,30 +955,27 @@
             transition: .8s .5s cubic-bezier(.34, 1.56, .64, 1);
             filter: drop-shadow(0 0 30px #FF1493);
         }
-        #section2 .cutted .inner-heart-cut {
+        #mainJourney .cutted .inner-heart-cut {
             transform: translate(-50%, -50%) scale(1);
         }
-        /* Rose */
-        #section2 .rose-container {
+
+        /* ---- Rose ---- */
+        #mainJourney .rose-container {
             position: relative;
             width: 130px;
             height: 180px;
             margin: 8px;
         }
-        #section2 .rose-flower {
+        #mainJourney .rose-flower {
             font-size: 100px;
             animation: roseBloom 2.5s infinite alternate ease-in-out;
             filter: drop-shadow(0 8px 20px rgba(214, 51, 108, 0.2));
         }
         @keyframes roseBloom {
-            0% {
-                transform: scale(.85) rotate(-4deg);
-            }
-            100% {
-                transform: scale(1.1) rotate(4deg);
-            }
+            0% { transform: scale(.85) rotate(-4deg); }
+            100% { transform: scale(1.1) rotate(4deg); }
         }
-        #section2 .rose-stem {
+        #mainJourney .rose-stem {
             position: absolute;
             width: 6px;
             height: 85px;
@@ -689,7 +984,7 @@
             top: 88px;
             border-radius: 10px;
         }
-        #section2 .rose-leaf {
+        #mainJourney .rose-leaf {
             position: absolute;
             width: 32px;
             height: 16px;
@@ -699,8 +994,9 @@
             left: 28px;
             transform: rotate(-25deg);
         }
-        /* ===== Urdu Poetry Style ===== */
-        #section2 .urdu-poetry {
+
+        /* ---- Urdu Poetry ---- */
+        #mainJourney .urdu-poetry {
             font-family: 'Noto Nastaliq Urdu', 'Urdu Typesetting', serif;
             font-size: 18px;
             line-height: 2;
@@ -716,28 +1012,28 @@
             direction: rtl;
             letter-spacing: 0.5px;
         }
-        #section2 .urdu-poetry .poetry-line {
+        #mainJourney .urdu-poetry .poetry-line {
             display: block;
             padding: 4px 0;
         }
-        #section2 .urdu-poetry .poetry-heart {
+        #mainJourney .urdu-poetry .poetry-heart {
             color: #D6336C;
             font-size: 22px;
         }
-        /* Love letter card (step 7) - WITH NAMES */
-        #section2 .love-letter-card {
+
+        /* ---- Love Letter ---- */
+        #mainJourney .love-letter-card {
             width: min(92%, 390px);
             padding: 28px 22px;
             border-radius: 30px 12px 30px 12px;
             background: rgba(255, 255, 255, .92);
-            box-shadow: 0 18px 45px rgba(214, 51, 108, .18),
-                inset 0 0 0 2px #ffd2df;
+            box-shadow: 0 18px 45px rgba(214, 51, 108, .18), inset 0 0 0 2px #ffd2df;
             position: relative;
             overflow: hidden;
             text-align: left;
             margin: 0 10px;
         }
-        #section2 .love-letter-card:before {
+        #mainJourney .love-letter-card:before {
             content: "💖";
             position: absolute;
             font-size: 120px;
@@ -746,35 +1042,35 @@
             bottom: -30px;
             transform: rotate(15deg);
         }
-        #section2 .love-letter-card .letter-heading {
+        #mainJourney .love-letter-card .letter-heading {
             font-family: 'Great Vibes', cursive;
             font-size: 28px;
             color: #D6336C;
             margin-bottom: 12px;
             letter-spacing: 0.5px;
         }
-        #section2 .love-letter-card .letter-body {
+        #mainJourney .love-letter-card .letter-body {
             color: #4a2a33;
             font-size: 16px;
             line-height: 2;
             font-weight: 500;
         }
-        #section2 .love-letter-card .letter-body .highlight {
+        #mainJourney .love-letter-card .letter-body .highlight {
             color: #D6336C;
             font-weight: 700;
         }
-        #section2 .love-letter-card .letter-sign {
+        #mainJourney .love-letter-card .letter-sign {
             font-family: 'Great Vibes', cursive;
             font-size: 26px;
             color: #FF69B4;
             margin-top: 12px;
             text-align: right;
         }
-        #section2 .love-letter-card .letter-btn-wrap {
+        #mainJourney .love-letter-card .letter-btn-wrap {
             text-align: center;
             margin-top: 18px;
         }
-        #section2 .love-letter-card .letter-btn-wrap .btn {
+        #mainJourney .love-letter-card .letter-btn-wrap .btn {
             margin-top: 0;
             min-width: 200px;
             padding: 15px 35px;
@@ -782,17 +1078,18 @@
             background: linear-gradient(135deg, #FF69B4, #FF1493);
             box-shadow: 0 7px 0 #A1325A, 0 12px 24px rgba(255, 20, 147, .3);
         }
-        #section2 .love-letter-card .letter-btn-wrap .btn:active {
+        #mainJourney .love-letter-card .letter-btn-wrap .btn:active {
             transform: translateY(5px);
             box-shadow: 0 2px 0 #A1325A;
         }
-        /* Fireworks */
-        #section2 .firework-wrap {
+
+        /* ---- Fireworks ---- */
+        #mainJourney .firework-wrap {
             position: relative;
             width: 200px;
             height: 200px;
         }
-        #section2 .firework-burst {
+        #mainJourney .firework-burst {
             position: absolute;
             left: 50%;
             top: 50%;
@@ -804,62 +1101,23 @@
             box-shadow: 0 0 16px var(--fw-color, #ff69b4);
             animation: fireworkShot 1.5s infinite;
         }
-        #section2 .firework-burst:nth-child(1) {
-            --fw-color: #FF69B4;
-            transform: rotate(0deg);
-            animation-delay: 0s;
-        }
-        #section2 .firework-burst:nth-child(2) {
-            --fw-color: #FFD700;
-            transform: rotate(45deg);
-            animation-delay: 0.1s;
-        }
-        #section2 .firework-burst:nth-child(3) {
-            --fw-color: #00BFFF;
-            transform: rotate(90deg);
-            animation-delay: 0.2s;
-        }
-        #section2 .firework-burst:nth-child(4) {
-            --fw-color: #FF6EB4;
-            transform: rotate(135deg);
-            animation-delay: 0.3s;
-        }
-        #section2 .firework-burst:nth-child(5) {
-            --fw-color: #FFA500;
-            transform: rotate(180deg);
-            animation-delay: 0.4s;
-        }
-        #section2 .firework-burst:nth-child(6) {
-            --fw-color: #7B68EE;
-            transform: rotate(225deg);
-            animation-delay: 0.5s;
-        }
-        #section2 .firework-burst:nth-child(7) {
-            --fw-color: #FF1493;
-            transform: rotate(270deg);
-            animation-delay: 0.6s;
-        }
-        #section2 .firework-burst:nth-child(8) {
-            --fw-color: #32CD32;
-            transform: rotate(315deg);
-            animation-delay: 0.7s;
-        }
+        #mainJourney .firework-burst:nth-child(1) { --fw-color: #FF69B4; transform: rotate(0deg); animation-delay: 0s; }
+        #mainJourney .firework-burst:nth-child(2) { --fw-color: #FFD700; transform: rotate(45deg); animation-delay: 0.1s; }
+        #mainJourney .firework-burst:nth-child(3) { --fw-color: #00BFFF; transform: rotate(90deg); animation-delay: 0.2s; }
+        #mainJourney .firework-burst:nth-child(4) { --fw-color: #FF6EB4; transform: rotate(135deg); animation-delay: 0.3s; }
+        #mainJourney .firework-burst:nth-child(5) { --fw-color: #FFA500; transform: rotate(180deg); animation-delay: 0.4s; }
+        #mainJourney .firework-burst:nth-child(6) { --fw-color: #7B68EE; transform: rotate(225deg); animation-delay: 0.5s; }
+        #mainJourney .firework-burst:nth-child(7) { --fw-color: #FF1493; transform: rotate(270deg); animation-delay: 0.6s; }
+        #mainJourney .firework-burst:nth-child(8) { --fw-color: #32CD32; transform: rotate(315deg); animation-delay: 0.7s; }
+
         @keyframes fireworkShot {
-            0% {
-                height: 8px;
-                opacity: 0;
-            }
-            40% {
-                height: 85px;
-                opacity: 1;
-            }
-            100% {
-                height: 110px;
-                opacity: 0;
-            }
+            0% { height: 8px; opacity: 0; }
+            40% { height: 85px; opacity: 1; }
+            100% { height: 110px; opacity: 0; }
         }
-        /* Night sky */
-        #section2 .sky-wrap {
+
+        /* ---- Night Sky ---- */
+        #mainJourney .sky-wrap {
             position: relative;
             width: 100%;
             height: 240px;
@@ -868,7 +1126,7 @@
             overflow: hidden;
             box-shadow: 0 15px 35px rgba(26, 10, 46, .3);
         }
-        #section2 .moon-glow {
+        #mainJourney .moon-glow {
             position: absolute;
             width: 70px;
             height: 70px;
@@ -878,7 +1136,7 @@
             top: 30px;
             box-shadow: 0 0 40px #fff4c7, 0 0 80px rgba(255, 244, 199, 0.2);
         }
-        #section2 .star-dot {
+        #mainJourney .star-dot {
             position: absolute;
             width: 4px;
             height: 4px;
@@ -887,16 +1145,10 @@
             animation: twinkle 1.8s infinite alternate;
         }
         @keyframes twinkle {
-            0% {
-                opacity: .2;
-                transform: scale(.6);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1.4);
-            }
+            0% { opacity: .2; transform: scale(.6); }
+            100% { opacity: 1; transform: scale(1.4); }
         }
-        #section2 .shooting-sky {
+        #mainJourney .shooting-sky {
             position: absolute;
             font-size: 32px;
             opacity: 0;
@@ -905,12 +1157,12 @@
             right: -40px;
             top: 20%;
         }
-        #section2 .shooting-sky.fire {
+        #mainJourney .shooting-sky.fire {
             right: 110%;
             top: 10%;
             opacity: 1;
         }
-        #section2 .sky-text {
+        #mainJourney .sky-text {
             position: absolute;
             bottom: 20px;
             left: 0;
@@ -920,49 +1172,31 @@
             font-size: 26px;
             text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
         }
-        /* Butterflies */
-        #section2 .butterfly-area {
+
+        /* ---- Butterflies ---- */
+        #mainJourney .butterfly-area {
             position: relative;
             width: 100%;
             height: 230px;
         }
-        #section2 .butterfly {
+        #mainJourney .butterfly {
             position: absolute;
             font-size: 44px;
             animation: butterflyFly 6s ease-in-out infinite;
             filter: drop-shadow(0 4px 12px rgba(214, 51, 108, 0.15));
         }
-        #section2 .bf1 {
-            left: 5%;
-            top: 30%;
-            animation-delay: 0s;
-        }
-        #section2 .bf2 {
-            left: 40%;
-            top: 10%;
-            animation-delay: 1.2s;
-        }
-        #section2 .bf3 {
-            right: 5%;
-            top: 40%;
-            animation-delay: 2.4s;
-        }
+        #mainJourney .bf1 { left: 5%; top: 30%; animation-delay: 0s; }
+        #mainJourney .bf2 { left: 40%; top: 10%; animation-delay: 1.2s; }
+        #mainJourney .bf3 { right: 5%; top: 40%; animation-delay: 2.4s; }
+
         @keyframes butterflyFly {
-            0%,
-            100% {
-                transform: translate(0, 0) rotate(-4deg) scale(1);
-            }
-            25% {
-                transform: translate(30px, -30px) rotate(10deg) scale(1.1);
-            }
-            50% {
-                transform: translate(-10px, -55px) rotate(-8deg) scale(0.95);
-            }
-            75% {
-                transform: translate(40px, -20px) rotate(6deg) scale(1.05);
-            }
+            0%, 100% { transform: translate(0, 0) rotate(-4deg) scale(1); }
+            25% { transform: translate(30px, -30px) rotate(10deg) scale(1.1); }
+            50% { transform: translate(-10px, -55px) rotate(-8deg) scale(0.95); }
+            75% { transform: translate(40px, -20px) rotate(6deg) scale(1.05); }
         }
-        #section2 .garden-flowers {
+
+        #mainJourney .garden-flowers {
             position: absolute;
             bottom: 10px;
             left: 10%;
@@ -972,14 +1206,15 @@
             text-align: center;
             opacity: 0.6;
         }
-        /* Treasure */
-        #section2 .treasure-box {
+
+        /* ---- Treasure ---- */
+        #mainJourney .treasure-box {
             width: 180px;
             height: 130px;
             position: relative;
             margin: 12px;
         }
-        #section2 .chest-base {
+        #mainJourney .chest-base {
             position: absolute;
             width: 170px;
             height: 88px;
@@ -990,7 +1225,7 @@
             border: 4px solid #D6336C;
             box-shadow: 0 12px 25px rgba(214, 51, 108, .2);
         }
-        #section2 .chest-lid {
+        #mainJourney .chest-lid {
             position: absolute;
             width: 170px;
             height: 52px;
@@ -1003,10 +1238,10 @@
             transition: .8s cubic-bezier(.2, .8, .2, 1);
             z-index: 2;
         }
-        #section2 .treasure-box.open .chest-lid {
+        #mainJourney .treasure-box.open .chest-lid {
             transform: rotateX(115deg) translateY(-8px);
         }
-        #section2 .treasure-lock {
+        #mainJourney .treasure-lock {
             position: absolute;
             left: 50%;
             bottom: 18px;
@@ -1015,7 +1250,7 @@
             z-index: 3;
             filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.15));
         }
-        #section2 .treasure-sparkle {
+        #mainJourney .treasure-sparkle {
             position: absolute;
             font-size: 28px;
             pointer-events: none;
@@ -1023,19 +1258,20 @@
             z-index: 4;
             transition: all 1.2s cubic-bezier(.34, 1.56, .64, 1);
         }
-        #section2 .treasure-box.open .treasure-sparkle {
+        #mainJourney .treasure-box.open .treasure-sparkle {
             opacity: 1;
             transform: translateY(-60px) scale(1.3);
         }
-        /* Memories */
-        #section2 .memory-grid {
+
+        /* ---- Memories ---- */
+        #mainJourney .memory-grid {
             display: flex;
             gap: 12px;
             width: 100%;
             justify-content: center;
             flex-wrap: wrap;
         }
-        #section2 .memory-card {
+        #mainJourney .memory-card {
             width: 88px;
             height: 118px;
             background: white;
@@ -1051,17 +1287,13 @@
             cursor: default;
             position: relative;
         }
-        #section2 .memory-card:nth-child(2) {
-            --rot: 4deg;
-        }
-        #section2 .memory-card:nth-child(3) {
-            --rot: -2deg;
-        }
-        #section2 .memory-card:active {
+        #mainJourney .memory-card:nth-child(2) { --rot: 4deg; }
+        #mainJourney .memory-card:nth-child(3) { --rot: -2deg; }
+        #mainJourney .memory-card:active {
             transform: rotate(0deg) scale(0.95);
             box-shadow: 0 4px 10px rgba(214, 51, 108, .12);
         }
-        #section2 .memory-card .memory-front {
+        #mainJourney .memory-card .memory-front {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1070,7 +1302,7 @@
             font-size: 36px;
             transition: opacity 0.3s;
         }
-        #section2 .memory-card .memory-back {
+        #mainJourney .memory-card .memory-back {
             display: none;
             align-items: center;
             justify-content: center;
@@ -1080,30 +1312,26 @@
             color: #D6336C;
             font-weight: 700;
         }
-        #section2 .memory-card.flipped .memory-front {
+        #mainJourney .memory-card.flipped .memory-front {
             display: none;
         }
-        #section2 .memory-card.flipped .memory-back {
+        #mainJourney .memory-card.flipped .memory-back {
             display: flex;
         }
-        /* Ring final */
-        #section2 .ring-glow {
+
+        /* ---- Ring Final ---- */
+        #mainJourney .ring-glow {
             font-size: 120px;
             animation: ringPulse 1.6s infinite alternate;
             filter: drop-shadow(0 0 20px #ffd700);
         }
         @keyframes ringPulse {
-            0% {
-                transform: scale(.9) rotate(-6deg);
-                filter: drop-shadow(0 0 10px #ffd700);
-            }
-            100% {
-                transform: scale(1.1) rotate(6deg);
-                filter: drop-shadow(0 0 50px #ffd700) drop-shadow(0 0 80px rgba(255, 215, 0, 0.3));
-            }
+            0% { transform: scale(.9) rotate(-6deg); filter: drop-shadow(0 0 10px #ffd700); }
+            100% { transform: scale(1.1) rotate(6deg); filter: drop-shadow(0 0 50px #ffd700) drop-shadow(0 0 80px rgba(255, 215, 0, 0.3)); }
         }
-        /* Final overlay - WITH NAMES + EXTRA LINE */
-        #section2 .final-overlay {
+
+        /* ---- Final Overlay ---- */
+        #mainJourney .final-overlay {
             position: absolute;
             inset: 0;
             background: rgba(255, 224, 230, .97);
@@ -1119,30 +1347,31 @@
             transform: scale(1.08);
             transition: .8s cubic-bezier(.23, 1, .32, 1);
         }
-        #section2 .final-overlay.show {
+        #mainJourney .final-overlay.show {
             opacity: 1;
             pointer-events: auto;
             transform: scale(1);
         }
-        #section2 .final-heart-big {
+        #mainJourney .final-heart-big {
             font-size: 100px;
             animation: heartbeat 1s infinite;
             filter: drop-shadow(0 8px 30px rgba(214, 51, 108, 0.3));
         }
-        #section2 .final-title-big {
+        #mainJourney .final-title-big {
             font-family: 'Great Vibes', cursive;
             color: #D6336C;
             font-size: 50px;
             margin: 8px;
         }
-        #section2 .final-sub-text {
+        #mainJourney .final-sub-text {
             color: #754257;
             font-size: 16px;
             line-height: 1.9;
             max-width: 360px;
         }
-        /* Confetti */
-        #section2 .confetti-piece {
+
+        /* ---- Confetti ---- */
+        #mainJourney .confetti-piece {
             position: absolute;
             top: -30px;
             animation: confettiFall linear forwards;
@@ -1151,12 +1380,11 @@
             font-size: 18px;
         }
         @keyframes confettiFall {
-            to {
-                transform: translateY(110vh) rotate(720deg) scale(0.5);
-            }
+            to { transform: translateY(110vh) rotate(720deg) scale(0.5); }
         }
-        /* Sparkles */
-        #section2 .sparkle-fly {
+
+        /* ---- Sparkles ---- */
+        #mainJourney .sparkle-fly {
             position: absolute;
             pointer-events: none;
             font-size: 24px;
@@ -1164,21 +1392,13 @@
             z-index: 20;
         }
         @keyframes sparkleUp {
-            0% {
-                transform: scale(.3);
-                opacity: 0;
-            }
-            30% {
-                opacity: 1;
-                transform: scale(1.2);
-            }
-            100% {
-                transform: translateY(-70px) scale(1.5);
-                opacity: 0;
-            }
+            0% { transform: scale(.3); opacity: 0; }
+            30% { opacity: 1; transform: scale(1.2); }
+            100% { transform: translateY(-70px) scale(1.5); opacity: 0; }
         }
-        /* Musical notes */
-        #section2 .music-note {
+
+        /* ---- Musical Notes ---- */
+        #mainJourney .music-note {
             position: absolute;
             font-size: 20px;
             opacity: 0.08;
@@ -1186,356 +1406,616 @@
             animation: noteFloat 8s infinite linear;
         }
         @keyframes noteFloat {
-            0% {
-                transform: translateY(110vh) rotate(0);
-                opacity: 0;
-            }
-            20% {
-                opacity: 0.08;
-            }
-            80% {
-                opacity: 0.08;
-            }
-            100% {
-                transform: translateY(-10vh) rotate(360deg);
-                opacity: 0;
-            }
+            0% { transform: translateY(110vh) rotate(0); opacity: 0; }
+            20% { opacity: 0.08; }
+            80% { opacity: 0.08; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
         }
-        /* Responsive */
+
+        /* ===== RESPONSIVE for mainJourney ===== */
         @media(max-width:380px) {
-            #section2 .title {
-                font-size: 42px;
-            }
-            #section2 .small-title {
-                font-size: 34px;
-            }
-            #section2 .subtitle {
-                font-size: 13px;
-            }
-            #section2 .btn {
-                min-width: 160px;
-                padding: 12px 18px;
-                font-size: 13px;
-            }
-            #section2 .cake-area {
-                transform: scale(.78);
-                margin: -22px;
-            }
-            #section2 .cut-area {
-                transform: scale(.82);
-                margin: -18px;
-            }
-            #section2 .balloons {
-                transform: scale(.82);
-                margin: -12px;
-            }
-            #section2 .love-letter-card {
-                padding: 22px 16px;
-            }
-            #section2 .love-letter-card .letter-body {
-                font-size: 14px;
-            }
-            #section2 .love-letter-card .letter-heading {
-                font-size: 24px;
-            }
-            #section2 .love-letter-card .letter-sign {
-                font-size: 22px;
-            }
-            #section2 .memory-card {
-                width: 74px;
-                height: 100px;
-                font-size: 28px;
-            }
-            #section2 .big-heart {
-                font-size: 70px;
-            }
-            #section2 .star-big {
-                font-size: 80px;
-            }
-            #section2 .ring-glow {
-                font-size: 90px;
-            }
-            #section2 .urdu-poetry {
-                font-size: 16px;
-                padding: 12px 15px;
-                max-width: 320px;
-            }
-            #section2 .final-title-big {
-                font-size: 38px;
-            }
+            #mainJourney .title { font-size: 42px; }
+            #mainJourney .small-title { font-size: 34px; }
+            #mainJourney .subtitle { font-size: 13px; }
+            #mainJourney .btn { min-width: 160px; padding: 12px 18px; font-size: 13px; }
+            #mainJourney .cake-area { transform: scale(.78); margin: -22px; }
+            #mainJourney .cut-area { transform: scale(.82); margin: -18px; }
+            #mainJourney .balloons { transform: scale(.82); margin: -12px; }
+            #mainJourney .love-letter-card { padding: 22px 16px; }
+            #mainJourney .love-letter-card .letter-body { font-size: 14px; }
+            #mainJourney .love-letter-card .letter-heading { font-size: 24px; }
+            #mainJourney .love-letter-card .letter-sign { font-size: 22px; }
+            #mainJourney .memory-card { width: 74px; height: 100px; font-size: 28px; }
+            #mainJourney .big-heart { font-size: 70px; }
+            #mainJourney .star-big { font-size: 80px; }
+            #mainJourney .ring-glow { font-size: 90px; }
+            #mainJourney .urdu-poetry { font-size: 16px; padding: 12px 15px; max-width: 320px; }
+            #mainJourney .final-title-big { font-size: 38px; }
+        }
+
+        /* ==========================================================
+           RESPONSIVE FOR COUNTDOWN SECTION
+        ========================================================== */
+        @media(max-width:480px) {
+            .lock-card { padding: 30px 20px; }
+            .lock-title { font-size: 24px; }
+            .bday-title { font-size: 48px; }
+            .bday-sub { font-size: 18px; }
+            .fancy-header { font-size: 36px; }
+            .sentence { font-size: 17px; }
+            .surprise-btn { font-size: 16px; padding: 14px 30px; }
+            .time-box { min-width: 70px; padding: 12px; }
+            .num { font-size: 28px; }
+        }
+        @media(max-width:360px) {
+            .lock-title { font-size: 20px; }
+            .bday-title { font-size: 38px; }
+            .bday-sub { font-size: 15px; }
+            .fancy-header { font-size: 28px; }
+            .sentence { font-size: 15px; }
+            .surprise-btn { font-size: 14px; padding: 12px 20px; }
+            .time-box { min-width: 55px; padding: 8px; }
+            .num { font-size: 22px; }
         }
     </style>
 </head>
 <body>
+    <!-- ===== BACKGROUND MUSIC (hidden) ===== -->
+    <audio id="bgMusic" src="assets/music.mpeg" loop preload="auto"></audio>
 
-    <!-- ==========================================================
-           SECTION 1: Simple Card (with Safia)
-    ========================================================== -->
-    <div id="section1">
-        <div class="card">
-            <span class="heart-float h1">❤️</span>
-            <span class="heart-float h2">🌸</span>
-            <span class="heart-float h3">💖</span>
-            <span class="heart-float h4">✨</span>
-            <h1>Happy Birthday Safia ❤️</h1>
-            <p class="msg">You are the reason my world is beautiful. <br>Shine like a star today & always 🌟</p>
-            <button class="btn-sendlove" onclick="openWish()">💖 Send Love</button>
+    <!-- ===== CANVAS FOR FIREWORKS ===== -->
+    <canvas id="fireworksCanvas"></canvas>
+
+    <!-- Ambient Bubbles -->
+    <div class="bg-sparkles" id="bubblesContainer"></div>
+
+    <div class="container">
+        <!-- PAGE 1: Lock & Countdown -->
+        <div class="lock-card" id="lockCard">
+            <div class="lock-icon">💖</div>
+            <h1 class="lock-title">Something Beautiful is Waiting</h1>
+            <p class="lock-subtitle">The special surprise will unlock when the countdown ends...</p>
+
+            <div class="countdown-grid">
+                <div class="time-box">
+                    <span class="num" id="days">00</span>
+                    <span class="label">Days</span>
+                </div>
+                <div class="time-box">
+                    <span class="num" id="hours">00</span>
+                    <span class="label">Hours</span>
+                </div>
+                <div class="time-box">
+                    <span class="num" id="minutes">00</span>
+                    <span class="label">Minutes</span>
+                </div>
+                <div class="time-box">
+                    <span class="num" id="seconds">00</span>
+                    <span class="label">Seconds</span>
+                </div>
+            </div>
         </div>
 
-        <!-- Modal -->
-        <div class="modal-overlay" id="loveModal">
-            <div class="modal-card">
-                <h2>🎉 Happy Birthday Safia! 🎂</h2>
-                <p>Safia! <br>I love you Safia... more than all the stars in the sky 💫❤️</p>
-                <button class="close-btn" onclick="transitionToSection2()">Hyee 💕</button>
+        <!-- PAGE 2: Birthday Celebration (8s Fireworks) -->
+        <div class="bday-card" id="bdayCard">
+            <div style="font-size: 60px; margin-bottom: 10px;">🎂✨🎉</div>
+            <h1 class="bday-title">Happy Birthday Safia!</h1>
+            <p class="bday-sub">Wishing you a day as sweet and bright as you are! 💖</p>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="progressFill"></div>
             </div>
+            <p class="timer-text">Preparing your surprise... <span id="celebrationCountdown">8</span>s</p>
+        </div>
+
+        <!-- PAGE 3: Welcome Screen with Sentences + Surprise Button -->
+        <div class="welcome-card" id="welcomeCard">
+            <h1 class="fancy-header">Welcome to the New Chapter! ✨</h1>
+            <div class="sentence-box">
+                <p class="sentence" id="s1">Welcome to a brand new year of your life! 🎉</p>
+                <p class="sentence" id="s2">May this chapter bring endless joy, success, and smiles. 🌸</p>
+                <p class="sentence" id="s3"><span class="sentence-highlight">We will make great memories together...</span> 💕</p>
+            </div>
+            <button class="surprise-btn" id="surpriseBtn" onclick="openSurprise()">
+                ✨ Enter The Surprise ✨
+            </button>
         </div>
     </div>
 
-    <!-- ==========================================================
-           SECTION 2: 13-Step Journey (full content)
-    ========================================================== -->
-    <div id="section2">
-        <div class="container">
-
-            <!-- Background hearts -->
-            <div class="bg-heart" style="left:6%;animation-duration:13s;font-size:24px;">♥</div>
-            <div class="bg-heart" style="left:22%;animation-duration:17s;font-size:30px;">♥</div>
-            <div class="bg-heart" style="left:42%;animation-duration:14s;font-size:20px;">♥</div>
-            <div class="bg-heart" style="left:65%;animation-duration:19s;font-size:28px;">♥</div>
-            <div class="bg-heart" style="left:88%;animation-duration:15s;font-size:22px;">♥</div>
-
-            <!-- Musical notes -->
-            <div class="music-note" style="left:10%;animation-duration:11s;">🎵</div>
-            <div class="music-note" style="left:35%;animation-duration:14s;animation-delay:3s;">🎶</div>
-            <div class="music-note" style="left:60%;animation-duration:12s;animation-delay:5s;">🎵</div>
-            <div class="music-note" style="left:85%;animation-duration:16s;animation-delay:2s;">🎶</div>
-
-            <!-- ========== STEP 1 ========== -->
-            <section class="step active" id="step1">
-                <div class="big-heart">💖</div>
-                <h1 class="title">Happy Birthday Safia ❤️</h1>
-                <p class="subtitle">
-                    ✨ Aaj ka din sirf tumhara hai ✨<br>
-                    Aur maine tumhare liye ek chhota sa <br>magical surprise banaya hai...
-                </p>
-                <button class="btn" onclick="goToStep(2)">🎂 Chalo Surprise Dekhein</button>
-            </section>
-
-            <!-- ========== STEP 2: BALLOONS ========== -->
-            <section class="step" id="step2">
-                <h2 class="small-title">Tumhari Birthday Party 🎈</h2>
-                <div class="balloons">
-                    <div class="balloon b1" onclick="popSingleBalloon(this, '💖 You are my sunshine!')"><div class="string"></div></div>
-                    <div class="balloon b2" onclick="popSingleBalloon(this, '🌸 I love you so much!')"><div class="string"></div></div>
-                    <div class="balloon b3" onclick="popSingleBalloon(this, '💫 You are magical!')"><div class="string"></div></div>
-                    <div class="balloon b4" onclick="popSingleBalloon(this, '🌹 My forever Valentine!')"><div class="string"></div></div>
-                    <div class="balloon b5" onclick="popSingleBalloon(this, '💕 You are my everything!')"><div class="string"></div></div>
-                </div>
-                <div class="balloon-msg" id="balloonMsg">💖 Tap a balloon to pop!</div>
-                <button class="btn white" id="balloonNextBtn" style="display:none;" onclick="goToStep(3)">🎂 Cake Dekhein</button>
-            </section>
-
-            <!-- ========== STEP 3: CAKE ========== -->
-            <section class="step" id="step3">
-                <h2 class="small-title">Your Birthday Cake 🎂</h2>
-                <div class="cake-area">
-                    <div class="cake">
-                        <div class="cake-sprinkles">✨ ✨ ✨ ✨ ✨</div>
-                        <div class="candle"><div class="flame"></div></div>
-                        <div class="candle"><div class="flame"></div></div>
-                        <div class="candle"><div class="flame"></div></div>
-                        <div class="candle"><div class="flame"></div></div>
-                        <div class="candle"><div class="flame"></div></div>
-                        <div class="cream"></div>
-                    </div>
-                </div>
-                <p class="subtitle">🕯️ Make a wish, birthday girl... <br>Tap the button to blow the candles!</p>
-                <button class="btn" id="blowBtn" onclick="blowCandles()">✨ Make A Wish</button>
-            </section>
-
-            <!-- ========== STEP 4: STAR WISH ========== -->
-            <section class="step" id="step4">
-                <div class="star-wrap">
-                    <div class="star-big" onclick="fireShootingStar()">🌟</div>
-                    <div class="shooting-star-effect" id="shootingStarEffect">🌠</div>
-                </div>
-                <h2 class="small-title">Make A Wish ✨</h2>
-                <div id="wishDisplay" class="wish-text">Tap the star 🌟</div>
-                <p class="subtitle">🌌 Jo bhi wish karo... dil se karo.</p>
-                <button class="btn white" id="wishNextBtn" style="display:none;" onclick="goToStep(5)">🎂 Cake Cut Karein</button>
-            </section>
-
-            <!-- ========== STEP 5: CAKE CUT ========== -->
-            <section class="step" id="step5">
-                <h2 class="small-title">Let's Cut The Cake 🎂</h2>
-                <div class="cut-area" id="cutArea">
-                    <div class="cut-cake cut-left"></div>
-                    <div class="cut-cake cut-right"></div>
-                    <div class="knife-icon" onclick="cutTheCake()">🔪</div>
-                    <div class="inner-heart-cut">💖</div>
-                </div>
-                <p class="subtitle">Cake ke andar bhi ek surprise hai... 💕</p>
-                <button class="btn" id="cutNextBtn" style="display:none;" onclick="goToStep(6)">🌹 Next Surprise</button>
-            </section>
-
-            <!-- ========== STEP 6: ROSE + URDU POETRY ========== -->
-            <section class="step" id="step6">
-                <div class="rose-container">
-                    <div class="rose-flower">🌹</div>
-                    <div class="rose-stem"></div>
-                    <div class="rose-leaf"></div>
-                </div>
-                <h2 class="small-title">A Rose For You 🌹</h2>
-                <p class="subtitle">
-                    Har phool se zyada khoobsurat <br>tum meri duniya mein ho. ❤️
-                </p>
-
-                <!-- ===== URDU POETRY (added here) ===== -->
-                <div class="urdu-poetry">
-                    <span class="poetry-line">کوئی اچھا سا پھول ہوتا تو مالی سے منگواتا،</span>
-                    <span class="poetry-line">جو خود گلاب ہے، اُسے کیا گلاب دوں؟ 🌹❤️</span>
-                    <span class="poetry-heart">💖 ✨ 💖</span>
-                </div>
-
-                <button class="btn" onclick="goToStep(7)">🌹 Accept My Rose</button>
-            </section>
-
-            <!-- ========== STEP 7: LOVE LETTER (with Safia & Atiq) ========== -->
-            <section class="step" id="step7">
-                <div class="love-letter-card">
-                    <div class="letter-heading">💌 Safia,</div>
-                    <div class="letter-body">
-                        Tum sirf meri Mangetar nahi,<br>
-                        meri duniya ki roshni ho. 😍<br><br>
-                        Har din tumhare saath jeena<br>
-                        ek khwab hai jo sach ho gaya.<br><br>
-                        <span class="highlight">I love you more than</span><br>
-                        <span class="highlight">yesterday,</span><br>
-                        <span class="highlight">less than tomorrow.</span>
-                    </div>
-                    <div class="letter-sign">- Atiq ❤️</div>
-                    <div class="letter-btn-wrap">
-                        <button class="btn" onclick="celebrateAndGoNext()">🎉 Celebrate</button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ========== STEP 8: FIREWORKS ========== -->
-            <section class="step" id="step8">
-                <div class="firework-wrap">
-                    <div class="firework-burst"></div>
-                    <div class="firework-burst"></div>
-                    <div class="firework-burst"></div>
-                    <div class="firework-burst"></div>
-                    <div class="firework-burst"></div>
-                    <div class="firework-burst"></div>
-                    <div class="firework-burst"></div>
-                    <div class="firework-burst"></div>
-                </div>
-                <h2 class="small-title">Because You Deserve Fireworks 🎆</h2>
-                <p class="subtitle"> 🎁❤️Tumhara hona hi mere liye kisi tohfe se kam nahi.🥰</p>
-                <button class="btn" onclick="goToStep(9)">🎆 Keep Going</button>
-            </section>
-
-            <!-- ========== STEP 9: NIGHT SKY ========== -->
-            <section class="step" id="step9">
-                <h2 class="small-title">Our Little Universe 🌙</h2>
-                <div class="sky-wrap">
-                    <div class="moon-glow"></div>
-                    <div class="star-dot" style="left:12%;top:18%;animation-delay:0s;"></div>
-                    <div class="star-dot" style="left:28%;top:42%;animation-delay:0.4s;"></div>
-                    <div class="star-dot" style="left:48%;top:22%;animation-delay:0.8s;"></div>
-                    <div class="star-dot" style="left:68%;top:60%;animation-delay:0.2s;"></div>
-                    <div class="star-dot" style="left:82%;top:28%;animation-delay:1s;"></div>
-                    <div class="star-dot" style="left:18%;top:72%;animation-delay:0.6s;"></div>
-                    <div class="star-dot" style="left:55%;top:78%;animation-delay:0.3s;"></div>
-                    <div class="star-dot" style="left:90%;top:70%;animation-delay:0.9s;"></div>
-                    <div class="shooting-sky" id="skyShooting">🌠</div>
-                    <div class="sky-text">✨ You are my favorite star ✨</div>
-                </div>
-                <button class="btn white" onclick="fireSkyShooting(); setTimeout(()=>goToStep(10),800);">🌠 Make a Wish</button>
-            </section>
-
-            <!-- ========== STEP 10: BUTTERFLIES ========== -->
-            <section class="step" id="step10">
-                <h2 class="small-title">A Garden For You 🦋</h2>
-                <div class="butterfly-area">
-                    <div class="butterfly bf1">🦋</div>
-                    <div class="butterfly bf2">🦋</div>
-                    <div class="butterfly bf3">🦋</div>
-                    <div class="garden-flowers">🌸 🌷 🌸 🌷 🌸</div>
-                </div>
-                <p class="subtitle">Jaise butterflies garden ko beautiful banati hain,<br>waise tum meri life ko beautiful banati ho. 💕</p>
-                <button class="btn" onclick="goToStep(11)">🦋 Continue</button>
-            </section>
-
-            <!-- ========== STEP 11: TREASURE ========== -->
-            <section class="step" id="step11">
-                <h2 class="small-title">My Greatest Treasure 💎</h2>
-                <div class="treasure-box" id="treasureBox">
-                    <div class="chest-base"></div>
-                    <div class="chest-lid"></div>
-                    <div class="treasure-lock">🔒</div>
-                    <div class="treasure-sparkle" style="left:20%;top:0%;">✨</div>
-                    <div class="treasure-sparkle" style="right:20%;top:10%;">💖</div>
-                    <div class="treasure-sparkle" style="left:45%;top:-15%;">⭐</div>
-                </div>
-                <p class="subtitle">Is treasure ke andar kuch special hai... 💕</p>
-                <button class="btn" id="treasureBtn" onclick="openTreasure()">🔓 Unlock My Heart</button>
-            </section>
-
-            <!-- ========== STEP 12: MEMORIES ========== -->
-            <section class="step" id="step12">
-                <h2 class="small-title">Our Little Memories 📸</h2>
-                <div class="memory-grid">
-                    <div class="memory-card" onclick="flipMemory(this)"><div class="memory-front">❤️</div><div class="memory-back">💕</div></div>
-                    <div class="memory-card" onclick="flipMemory(this)"><div class="memory-front">🥰</div><div class="memory-back">💖</div></div>
-                    <div class="memory-card" onclick="flipMemory(this)"><div class="memory-front">💑</div><div class="memory-back">✨</div></div>
-                </div>
-                <p class="subtitle">Har memory apni jagah special hai...<br>aur sabse beautiful memory abhi baqi hai. ✨</p>
-                <button class="btn" onclick="goToStep(13)">💕 One Last Surprise</button>
-            </section>
-
-            <!-- ========== STEP 13: FINAL RING ========== -->
-            <section class="step" id="step13">
-                <div class="ring-glow">💍</div>
-                <h2 class="small-title">And Finally... 💖</h2>
-                <p class="subtitle">Meri ek chhoti si wish hai... ❤️</p>
-                <button class="btn" onclick="finalSurprise()">💖 Open My Heart</button>
-            </section>
-
-            <!-- ===== FINAL OVERLAY (with extra romantic line + Atiq) ===== -->
-            <div class="final-overlay" id="finalOverlay">
-                <div class="final-heart-big">💖</div>
-                <div class="final-title-big">Happy Birthday Safia! 🎂</div>
-                <div class="final-sub-text">
-                    We get only one lifetime<br>
-                    and I am grateful that I met you in it.<br><br>
-                    Happy Birthday Madam. 🌹<br><br>
-                    Tum meri zindagi ka woh khoobsurat hissa ho<br>
-                    jiske bina sab kuch adhura sa lagta hai. ❤️
-                    <br><br>
-                   <b>Bas yunhi hamesha meri zindagi ka haseen hissa bani rehna. ❤️🫶🏻</b>
-<br><br>
-
-<b>Happy Birthday, My Love! 🎂❤️</b>
-<br>
-<b>— Atiq 💖</b>
-                </div>
-                <button class="btn" onclick="closeFinal()">🥰 I Love You</button>
+    <!-- ===== ORIGINAL 13‑STEP JOURNEY (hidden initially) ===== -->
+    <div id="mainJourney">
+        <!-- Section 1: Simple Card -->
+        <div id="section1">
+            <div class="card">
+                <span class="heart-float h1">❤️</span>
+                <span class="heart-float h2">🌸</span>
+                <span class="heart-float h3">💖</span>
+                <span class="heart-float h4">✨</span>
+                <h1>Happy Birthday Safia ❤️</h1>
+                <p class="msg">You are the reason my world is beautiful. <br>Shine like a star today & always 🌟</p>
+                <button class="btn-sendlove" onclick="openWish()">💖 Send Love</button>
             </div>
 
-            <!-- ===== CONFETTI CANVAS ===== -->
-            <canvas id="confetti-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:150;"></canvas>
+            <!-- Modal -->
+            <div class="modal-overlay" id="loveModal">
+                <div class="modal-card">
+                    <h2>🎉 Happy Birthday Safia! 🎂</h2>
+                    <p>Safia! <br>I love you Safia... more than all the stars in the sky 💫❤️</p>
+                    <button class="close-btn" onclick="transitionToSection2()">Hyee 💕</button>
+                </div>
+            </div>
+        </div>
 
+        <!-- Section 2: 13‑Step Journey -->
+        <div id="section2">
+            <div class="container">
+                <!-- Background hearts -->
+                <div class="bg-heart" style="left:6%;animation-duration:13s;font-size:24px;">♥</div>
+                <div class="bg-heart" style="left:22%;animation-duration:17s;font-size:30px;">♥</div>
+                <div class="bg-heart" style="left:42%;animation-duration:14s;font-size:20px;">♥</div>
+                <div class="bg-heart" style="left:65%;animation-duration:19s;font-size:28px;">♥</div>
+                <div class="bg-heart" style="left:88%;animation-duration:15s;font-size:22px;">♥</div>
+
+                <!-- Musical notes -->
+                <div class="music-note" style="left:10%;animation-duration:11s;">🎵</div>
+                <div class="music-note" style="left:35%;animation-duration:14s;animation-delay:3s;">🎶</div>
+                <div class="music-note" style="left:60%;animation-duration:12s;animation-delay:5s;">🎵</div>
+                <div class="music-note" style="left:85%;animation-duration:16s;animation-delay:2s;">🎶</div>
+
+                <!-- ===== STEP 1 ===== -->
+                <section class="step active" id="step1">
+                    <div class="big-heart">💖</div>
+                    <h1 class="title">Happy Birthday Safia ❤️</h1>
+                    <p class="subtitle">
+                        ✨ Aaj ka din sirf tumhara hai ✨<br>
+                        Aur maine tumhare liye ek chhota sa <br>magical surprise banaya hai...
+                    </p>
+                    <button class="btn" onclick="goToStep(2)">🎂 Chalo Surprise Dekhein</button>
+                </section>
+
+                <!-- ===== STEP 2: BALLOONS ===== -->
+                <section class="step" id="step2">
+                    <h2 class="small-title">Surprice Names on your Birthday 🎈</h2>
+                    <div class="balloons">
+                        <div class="balloon b1" onclick="popSingleBalloon(this, '💖 You are my Darling!')"><div class="string"></div></div>
+                        <div class="balloon b2" onclick="popSingleBalloon(this, '🌸 Mery jana!')"><div class="string"></div></div>
+                        <div class="balloon b3" onclick="popSingleBalloon(this, '💫 sweety!')"><div class="string"></div></div>
+                        <div class="balloon b4" onclick="popSingleBalloon(this, '🌹 My forever Heartbeat!')"><div class="string"></div></div>
+                        <div class="balloon b5" onclick="popSingleBalloon(this, '💕 You are my everything!')"><div class="string"></div></div>
+                    </div>
+                    <div class="balloon-msg" id="balloonMsg">💖 Tap a balloon to pop!</div>
+                    <button class="btn white" id="balloonNextBtn" style="display:none;" onclick="goToStep(3)">🎂 Cake Dekhein</button>
+                </section>
+
+                <!-- ===== STEP 3: CAKE ===== -->
+                <section class="step" id="step3">
+                    <h2 class="small-title">Your Birthday Cake 🎂</h2>
+                    <div class="cake-area">
+                        <div class="cake">
+                            <div class="cake-sprinkles">✨ ✨ ✨ ✨ ✨</div>
+                            <div class="candle"><div class="flame"></div></div>
+                            <div class="candle"><div class="flame"></div></div>
+                            <div class="candle"><div class="flame"></div></div>
+                            <div class="candle"><div class="flame"></div></div>
+                            <div class="candle"><div class="flame"></div></div>
+                            <div class="cream"></div>
+                        </div>
+                    </div>
+                    <p class="subtitle">🕯️ Make a wish, birthday girl... <br>Tap the button to blow the candles!</p>
+                    <button class="btn" id="blowBtn" onclick="blowCandles()">✨ Make A Wish</button>
+                </section>
+
+                <!-- ===== STEP 4: STAR WISH ===== -->
+                <section class="step" id="step4">
+                    <div class="star-wrap">
+                        <div class="star-big" onclick="fireShootingStar()">🌟</div>
+                        <div class="shooting-star-effect" id="shootingStarEffect">🌠</div>
+                    </div>
+                    <h2 class="small-title">Make A Wish ✨</h2>
+                    <div id="wishDisplay" class="wish-text">Tap the star 🌟</div>
+                    <p class="subtitle">🌌 Jo bhi wish karo... dil se karo.</p>
+                    <button class="btn white" id="wishNextBtn" style="display:none;" onclick="goToStep(5)">🎂 Cake Cut Karein</button>
+                </section>
+
+                <!-- ===== STEP 5: CAKE CUT ===== -->
+                <section class="step" id="step5">
+                    <h2 class="small-title">Let's Cut The Cake 🎂</h2>
+                    <div class="cut-area" id="cutArea">
+                        <div class="cut-cake cut-left"></div>
+                        <div class="cut-cake cut-right"></div>
+                        <div class="knife-icon" onclick="cutTheCake()">🔪</div>
+                        <div class="inner-heart-cut">💖</div>
+                    </div>
+                    <p class="subtitle">Cake ke andar bhi ek surprise hai... 💕</p>
+                    <button class="btn" id="cutNextBtn" style="display:none;" onclick="goToStep(6)">🌹 Next Surprise</button>
+                </section>
+
+                <!-- ===== STEP 6: ROSE + URDU POETRY ===== -->
+                <section class="step" id="step6">
+                    <div class="rose-container">
+                        <div class="rose-flower">🌹</div>
+                        <div class="rose-stem"></div>
+                        <div class="rose-leaf"></div>
+                    </div>
+                    <h2 class="small-title">A Rose For You 🌹</h2>
+                    <p class="subtitle">
+                        Har phool se zyada khoobsurat <br>tum meri duniya mein ho. ❤️
+                    </p>
+                    <div class="urdu-poetry">
+                        <span class="poetry-line">کوئی اچھا سا پھول ہوتا تو مالی سے منگواتا،</span>
+                        <span class="poetry-line">جو خود گلاب ہے، اُسے کیا گلاب دوں؟ 🌹❤️</span>
+                        <span class="poetry-heart">💖 ✨ 💖</span>
+                    </div>
+                    <button class="btn" onclick="goToStep(7)">🌹 Accept My Rose</button>
+                </section>
+
+                <!-- ===== STEP 7: LOVE LETTER ===== -->
+                <section class="step" id="step7">
+                    <div class="love-letter-card">
+                        <div class="letter-heading">💌 Safia,</div>
+                        <div class="letter-body">
+                            Tum sirf meri Mangetar nahi,<br>
+                            meri duniya ki roshni ho. 😍<br><br>
+                            Har din tumhare saath jeena<br>
+                            ek khwab hai jo sach ho gaya.<br><br>
+                            <span class="highlight">I love you more than</span><br>
+                            <span class="highlight">yesterday,</span><br>
+                            <span class="highlight">less than tomorrow.</span>
+                        </div>
+                        <div class="letter-sign">- Atiq ❤️</div>
+                        <div class="letter-btn-wrap">
+                            <button class="btn" onclick="celebrateAndGoNext()">🎉 Celebrate</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== STEP 8: FIREWORKS ===== -->
+                <section class="step" id="step8">
+                    <div class="firework-wrap">
+                        <div class="firework-burst"></div>
+                        <div class="firework-burst"></div>
+                        <div class="firework-burst"></div>
+                        <div class="firework-burst"></div>
+                        <div class="firework-burst"></div>
+                        <div class="firework-burst"></div>
+                        <div class="firework-burst"></div>
+                        <div class="firework-burst"></div>
+                    </div>
+                    <h2 class="small-title">Because You Deserve Fireworks 🎆</h2>
+                    <p class="subtitle"> 🎁❤️Tumhara hona hi mere liye kisi tohfe se kam nahi.🥰</p>
+                    <button class="btn" onclick="goToStep(9)">🎆 Keep Going</button>
+                </section>
+
+                <!-- ===== STEP 9: NIGHT SKY ===== -->
+                <section class="step" id="step9">
+                    <h2 class="small-title">Our Little Universe 🌙</h2>
+                    <div class="sky-wrap">
+                        <div class="moon-glow"></div>
+                        <div class="star-dot" style="left:12%;top:18%;animation-delay:0s;"></div>
+                        <div class="star-dot" style="left:28%;top:42%;animation-delay:0.4s;"></div>
+                        <div class="star-dot" style="left:48%;top:22%;animation-delay:0.8s;"></div>
+                        <div class="star-dot" style="left:68%;top:60%;animation-delay:0.2s;"></div>
+                        <div class="star-dot" style="left:82%;top:28%;animation-delay:1s;"></div>
+                        <div class="star-dot" style="left:18%;top:72%;animation-delay:0.6s;"></div>
+                        <div class="star-dot" style="left:55%;top:78%;animation-delay:0.3s;"></div>
+                        <div class="star-dot" style="left:90%;top:70%;animation-delay:0.9s;"></div>
+                        <div class="shooting-sky" id="skyShooting">🌠</div>
+                        <div class="sky-text">✨ You are my favorite star ✨</div>
+                    </div>
+                    <button class="btn white" onclick="fireSkyShooting(); setTimeout(()=>goToStep(10),800);">🌠 Make a Wish</button>
+                </section>
+
+                <!-- ===== STEP 10: BUTTERFLIES ===== -->
+                <section class="step" id="step10">
+                    <h2 class="small-title">A Garden For You 🦋</h2>
+                    <div class="butterfly-area">
+                        <div class="butterfly bf1">🦋</div>
+                        <div class="butterfly bf2">🦋</div>
+                        <div class="butterfly bf3">🦋</div>
+                        <div class="garden-flowers">🌸 🌷 🌸 🌷 🌸</div>
+                    </div>
+                    <p class="subtitle">Jaise butterflies garden ko beautiful banati hain,<br>waise tum meri life ko beautiful banati ho. 💕</p>
+                    <button class="btn" onclick="goToStep(11)">🦋 Continue</button>
+                </section>
+
+                <!-- ===== STEP 11: TREASURE ===== -->
+                <section class="step" id="step11">
+                    <h2 class="small-title">My Greatest Treasure 💎</h2>
+                    <div class="treasure-box" id="treasureBox">
+                        <div class="chest-base"></div>
+                        <div class="chest-lid"></div>
+                        <div class="treasure-lock">🔒</div>
+                        <div class="treasure-sparkle" style="left:20%;top:0%;">✨</div>
+                        <div class="treasure-sparkle" style="right:20%;top:10%;">💖</div>
+                        <div class="treasure-sparkle" style="left:45%;top:-15%;">⭐</div>
+                    </div>
+                    <p class="subtitle">Is treasure ke andar kuch special hai... 💕</p>
+                    <button class="btn" id="treasureBtn" onclick="openTreasure()">🔓 Unlock My Heart</button>
+                </section>
+
+                <!-- ===== STEP 12: MEMORIES ===== -->
+                <section class="step" id="step12">
+                    <h2 class="small-title">Our Little Memories 📸</h2>
+                    <div class="memory-grid">
+                        <div class="memory-card" onclick="flipMemory(this)"><div class="memory-front">❤️</div><div class="memory-back">💕</div></div>
+                        <div class="memory-card" onclick="flipMemory(this)"><div class="memory-front">🥰</div><div class="memory-back">💖</div></div>
+                        <div class="memory-card" onclick="flipMemory(this)"><div class="memory-front">💑</div><div class="memory-back">✨</div></div>
+                    </div>
+                    <p class="subtitle">Har memory apni jagah special hai...<br>aur sabse beautiful memory abhi baqi hai. ✨</p>
+                    <button class="btn" onclick="goToStep(13)">💕 One Last Surprise</button>
+                </section>
+
+                <!-- ===== STEP 13: FINAL RING ===== -->
+                <section class="step" id="step13">
+                    <div class="ring-glow">💍</div>
+                    <h2 class="small-title">And Finally... 💖</h2>
+                    <p class="subtitle">Meri ek chhoti si wish hai... ❤️</p>
+                    <button class="btn" onclick="finalSurprise()">💖 Open My Heart</button>
+                </section>
+
+                <!-- ===== FINAL OVERLAY ===== -->
+                <div class="final-overlay" id="finalOverlay">
+                    <div class="final-heart-big">💖</div>
+                    <div class="final-title-big">Happy Birthday Safia! 🎂</div>
+                    <div class="final-sub-text">
+                        We get only one lifetime<br>
+                        and I am grateful that I met you in it.<br><br>
+                        Happy Birthday Madam. 🌹<br><br>
+                        Tum meri zindagi ka woh khoobsurat hissa ho<br>
+                        jiske bina sab kuch adhura sa lagta hai. ❤️
+                        <br><br>
+                        <b>Bas yunhi hamesha meri zindagi ka haseen hissa bani rehna. ❤️🫶🏻</b>
+                        <br><br>
+                        <b>Happy Birthday, My Love! 🎂❤️</b>
+                        <br>
+                        <b>— Atiq 💖</b>
+                    </div>
+                    <button class="btn" onclick="closeFinal()">🥰 I Love You</button>
+                </div>
+
+                <!-- ===== CONFETTI CANVAS ===== -->
+                <canvas id="confetti-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:150;"></canvas>
+
+            </div>
         </div>
     </div>
 
     <script>
         /* ==========================================================
-           SECTION 1: Modal and Transition
+           COUNTDOWN LOGIC (Target: 9 September 2026)
         ========================================================== */
+        // ✅ REAL COUNTDOWN – 9 September 2026
+        let targetDate = new Date("Sep 9, 2026 00:00:00").getTime();
+
+        const daysEl = document.getElementById('days');
+        const hoursEl = document.getElementById('hours');
+        const minutesEl = document.getElementById('minutes');
+        const secondsEl = document.getElementById('seconds');
+
+        const lockCard = document.getElementById('lockCard');
+        const bdayCard = document.getElementById('bdayCard');
+        const welcomeCard = document.getElementById('welcomeCard');
+        const surpriseBtn = document.getElementById('surpriseBtn');
+        const progressFill = document.getElementById('progressFill');
+        const celebrationCountdown = document.getElementById('celebrationCountdown');
+        const bgMusic = document.getElementById('bgMusic');
+
+        let musicStarted = false;
+
+        /* ==========================================================
+           BACKGROUND MUSIC – START AT 1m 45s remaining
+        ========================================================== */
+        function playBackgroundMusic() {
+            if (!bgMusic) return;
+            if (musicStarted) return;
+            musicStarted = true;
+            bgMusic.volume = 0.45;
+            bgMusic.loop = true;
+            bgMusic.play().catch(() => {
+                musicStarted = false;
+            });
+        }
+
+        function startMusicOnInteraction() {
+            if (!musicStarted) {
+                playBackgroundMusic();
+            }
+        }
+        document.addEventListener('pointerdown', startMusicOnInteraction, { once: true });
+        document.addEventListener('touchstart', startMusicOnInteraction, { once: true });
+
+        /* ==========================================================
+           COUNTDOWN UPDATE
+        ========================================================== */
+        let timerInterval = setInterval(updateCountdown, 1000);
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const difference = targetDate - now;
+
+            // ✅ Music starts when 1 minute 45 seconds (105 seconds) remaining
+            if (difference <= 105000 && difference > 0 && !musicStarted) {
+                playBackgroundMusic();
+            }
+
+            if (difference <= 0) {
+                clearInterval(timerInterval);
+                if (!musicStarted) playBackgroundMusic();
+                startCelebrationSequence();
+                return;
+            }
+
+            const d = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const h = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((difference % (1000 * 60)) / 1000);
+
+            daysEl.innerText = String(d).padStart(2, '0');
+            hoursEl.innerText = String(h).padStart(2, '0');
+            minutesEl.innerText = String(m).padStart(2, '0');
+            secondsEl.innerText = String(s).padStart(2, '0');
+        }
+
+        /* ==========================================================
+           CELEBRATION SEQUENCE (8s fireworks)
+        ========================================================== */
+        function startCelebrationSequence() {
+            lockCard.style.display = 'none';
+            bdayCard.classList.add('active');
+            startFireworks();
+
+            let totalSeconds = 8;
+            let elapsed = 0;
+            let bdayInterval = setInterval(() => {
+                elapsed += 0.1;
+                let remaining = Math.max(0, Math.ceil(totalSeconds - elapsed));
+                celebrationCountdown.innerText = remaining;
+                let percent = (elapsed / totalSeconds) * 100;
+                progressFill.style.width = Math.min(100, percent) + '%';
+
+                if (elapsed >= totalSeconds) {
+                    clearInterval(bdayInterval);
+                    stopFireworks();
+                    transitionToWelcomePage();
+                }
+            }, 100);
+        }
+
+        /* ==========================================================
+           WELCOME PAGE WITH SEQUENTIAL SENTENCES
+        ========================================================== */
+        function transitionToWelcomePage() {
+            bdayCard.style.display = 'none';
+            welcomeCard.classList.add('zoom-in-active');
+
+            setTimeout(() => { document.getElementById('s1').classList.add('show'); }, 500);
+            setTimeout(() => { document.getElementById('s2').classList.add('show'); }, 1900);
+            setTimeout(() => { document.getElementById('s3').classList.add('show'); }, 3500);
+            setTimeout(() => { surpriseBtn.classList.add('show-btn'); }, 4800);
+        }
+
+        /* ==========================================================
+           SURPRISE BUTTON – SHOW ORIGINAL 13‑STEP JOURNEY
+        ========================================================== */
+        function openSurprise() {
+            if (!musicStarted) playBackgroundMusic();
+
+            welcomeCard.style.display = 'none';
+            const journey = document.getElementById('mainJourney');
+            journey.style.display = 'block';
+            document.getElementById('section1').style.display = 'flex';
+            document.getElementById('section2').classList.remove('visible');
+        }
+
+        /* ==========================================================
+           AMBIENT BUBBLES
+        ========================================================== */
+        const bubblesContainer = document.getElementById('bubblesContainer');
+        for (let i = 0; i < 25; i++) {
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            const size = Math.random() * 40 + 10;
+            bubble.style.width = size + 'px';
+            bubble.style.height = size + 'px';
+            bubble.style.left = Math.random() * 100 + '%';
+            bubble.style.animationDuration = (Math.random() * 6 + 5) + 's';
+            bubble.style.animationDelay = (Math.random() * 4) + 's';
+            bubblesContainer.appendChild(bubble);
+        }
+
+        /* ==========================================================
+           FIREWORKS ENGINE (Canvas)
+        ========================================================== */
+        const canvas = document.getElementById('fireworksCanvas');
+        const ctx = canvas.getContext('2d');
+        let fireworksParticles = [];
+        let isFireworksActive = false;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.radius = Math.random() * 3 + 2;
+                this.velocity = {
+                    x: (Math.random() - 0.5) * (Math.random() * 8 + 2),
+                    y: (Math.random() - 0.5) * (Math.random() * 8 + 2)
+                };
+                this.alpha = 1;
+                this.friction = 0.96;
+                this.gravity = 0.08;
+            }
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = this.color;
+                ctx.fill();
+                ctx.restore();
+            }
+            update() {
+                this.velocity.x *= this.friction;
+                this.velocity.y *= this.friction;
+                this.velocity.y += this.gravity;
+                this.x += this.velocity.x;
+                this.y += this.velocity.y;
+                this.alpha -= 0.015;
+            }
+        }
+
+        function createFirework() {
+            if (!isFireworksActive) return;
+            const x = Math.random() * (canvas.width * 0.8) + canvas.width * 0.1;
+            const y = Math.random() * (canvas.height * 0.5) + canvas.height * 0.1;
+            const colors = ['#f472b6', '#db2777', '#fbbf24', '#ffffff', '#f43f5e', '#a855f7'];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            for (let i = 0; i < 40; i++) {
+                fireworksParticles.push(new Particle(x, y, color));
+            }
+        }
+
+        let fireworkTimer;
+
+        function startFireworks() {
+            isFireworksActive = true;
+            animateFireworks();
+            fireworkTimer = setInterval(createFirework, 300);
+        }
+
+        function stopFireworks() {
+            isFireworksActive = false;
+            clearInterval(fireworkTimer);
+        }
+
+        function animateFireworks() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            fireworksParticles.forEach((particle, index) => {
+                if (particle.alpha <= 0) {
+                    fireworksParticles.splice(index, 1);
+                } else {
+                    particle.update();
+                    particle.draw();
+                }
+            });
+            if (isFireworksActive || fireworksParticles.length > 0) {
+                requestAnimationFrame(animateFireworks);
+            }
+        }
+
+        /* ==========================================================
+           ORIGINAL 13-STEP JOURNEY SCRIPTS
+        ========================================================== */
+
+        // ---- Section 1 Modal ----
         function openWish() {
             document.getElementById('loveModal').classList.add('active');
         }
@@ -1554,9 +2034,7 @@
             }, 400);
         }
 
-        /* ==========================================================
-           SECTION 2: All Functions
-        ========================================================== */
+        // ---- Section 2 Functions ----
         let currentStep = 1;
         let isConfettiRunning = false;
 
@@ -1630,7 +2108,6 @@
         }
 
         const wishList = [
-            
             "Dil sirf tumpe aata hai 💕",
             "Tumse pyar karna meri aadat hai 🌸",
             "You are my forever 💖",
@@ -1820,9 +2297,9 @@
                         Bas ek baat yaad rakhna... ❤️<br><br>
                         <b>Tum meri favourite person ho.</b><br><br>
                         🌹 Happy Birthday Once Again 🌹<br><br>
-                       <b>Har kal mein, har janam mein... main sirf aap ka hi rahunga. ❤️🌹🔐</b>
-                       
-                       <b>اللہ حافظ ❤️🌹🫶🏻✨</b>
+                        <b>Har kal mein, har janam mein... main sirf aap ka hi rahunga. ❤️🌹🔐</b>
+                        <br><br>
+                        <b>اللہ حافظ ❤️🌹🫶🏻✨</b>
                     </div>
                 `;
                 launchConfettiSection2();
@@ -1864,6 +2341,7 @@
             }
         }
 
+        // Resize for confetti canvas
         window.addEventListener('resize', function() {
             const canvas = document.getElementById('confetti-canvas');
             if (canvas) {
@@ -1873,6 +2351,8 @@
         });
 
         console.log('💖 Happy Birthday Safia! - From Atiq 💖');
+        console.log('🎵 Music will auto-start when 1 minute 45 seconds remain.');
+        console.log('📅 Countdown to: 9 September 2026');
     </script>
 
 </body>
